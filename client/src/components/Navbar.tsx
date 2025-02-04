@@ -20,10 +20,17 @@ const Navbar: React.FC = () => {
       <div className="max-w-[1440px] mx-auto w-[90%]">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2">
-            <img src="/redlogo.png" alt="BUReD Logo" className="h-12 w-auto" />
-            <span className="text-2xl font-bold text-gray-900">BUReD</span>
+          <Link to="/" className="flex items-center space-x-3">
+            <img  src="/photos/logos/redlogo.png" alt="BUReD Logo" className="h-12 w-auto" />
+            <div className="flex flex-col">
+              <span className="text-2xl font-bold text-gray-900">BUReD</span>
+              <span className="text-xs text-gray-600 -mt-1">
+                BRAC University Research for Development Club
+              </span>
+            </div>
           </Link>
+          
+          
 
           {/* Navigation Links */}
           <nav className="hidden md:flex items-center space-x-8">
