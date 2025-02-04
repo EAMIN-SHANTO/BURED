@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from "react-router-dom";
+import { NavigationItem } from '../layouts/MainLayout';
 
-const Navbar: React.FC = () => {
+interface NavbarProps {
+  navigation: NavigationItem[];
+}
+
+const Navbar: React.FC<NavbarProps> = ({ navigation }) => {
   const location = useLocation();
   const [scrolled, setScrolled] = useState<boolean>(false);
 
@@ -44,23 +49,17 @@ const Navbar: React.FC = () => {
 
           {/* Navigation Links */}
           <nav className="hidden md:flex items-center space-x-10">
-            {[
-              { path: '/', label: 'Home' },
-              { path: '/about', label: 'About' },
-              { path: '/panel', label: 'Panel' },
-              { path: '/gallery', label: 'Gallery' },
-              { path: '/blog', label: 'Blog' },
-            ].map((item) => (
+            {navigation.map((item) => (
               <Link
-                key={item.path}
-                to={item.path}
+                key={item.name}
+                to={item.href}
                 className={`text-sm font-medium transition-all duration-300 
-                  ${location.pathname === item.path
+                  ${location.pathname === item.href
                     ? 'text-blue-600'
                     : 'text-gray-600 hover:text-blue-600'
                   }`}
               >
-                {item.label}
+                {item.name}
               </Link>
             ))}
           </nav>
