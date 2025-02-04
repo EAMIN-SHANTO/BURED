@@ -4,6 +4,16 @@ import Navbar from "../components/Navbar.js";
 import Footer from "../components/Footer.js";
 
 const MainLayout: React.FC = () => {
+  const navigation = [
+    { name: 'Home', href: '/' },
+    { name: 'About', href: '/about' },
+    { name: 'Community', href: '/community' },
+    { name: 'Panel', href: '/panel' },
+    { name: 'Gallery', href: '/gallery' },
+    { name: 'Events', href: '/events' },
+    { name: 'Recent Press Releases', href: '/press' }
+  ];
+
   return (
     <div className="min-h-screen flex flex-col">
       <div className="absolute w-full">

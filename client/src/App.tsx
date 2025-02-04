@@ -7,6 +7,7 @@ import Register from "./routes/Register";
 import About from './routes/About';
 import Panel from './routes/Panel';
 import Gallery from './routes/Gallery';
+import Blog from './routes/Blog';
 
 const App: React.FC = () => {
   return (
@@ -19,6 +20,7 @@ const App: React.FC = () => {
           <Route path="about" element={<About />} />
           <Route path="panel" element={<Panel />} />
           <Route path="gallery" element={<Gallery />} />
+          <Route path="blog" element={<Blog />} />
           <Route path="*" element={
             <div className="min-h-screen bg-gray-50 pt-20 flex items-center justify-center">
               <div className="text-center">

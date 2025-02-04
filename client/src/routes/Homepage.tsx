@@ -35,18 +35,27 @@ const Homepage: React.FC = () => {
 
   return (
     <div className="flex flex-col">
-      {/* Hero Section - Modern Gradient Background */}
-      <section className="relative min-h-screen bg-gradient-to-br from-blue-50 via-white to-gray-50">
-        <div className="absolute inset-0 bg-[url('/photos/other/grid.svg')] opacity-[0.03]" />
-        <div className="max-w-[1440px] mx-auto w-[90%] h-full">
+      {/* Hero Section */}
+      <section className="relative min-h-screen overflow-hidden">
+        {/* Background Image and Overlay */}
+        <div className="absolute inset-0">
+          <img 
+            src="/photos/other/research.png"
+            alt="Research Background"
+            className="w-full h-full object-cover object-center"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-white/95 via-white/90 to-white/95"></div>
+        </div>
+
+        <div className="relative max-w-[1440px] mx-auto w-[90%] h-full">
           <div className="flex flex-col lg:flex-row items-center justify-between gap-16 pt-32">
             <div className="flex-1 space-y-8">
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-100/50 
-                rounded-full text-blue-600 text-sm backdrop-blur-sm">
+                backdrop-blur-sm rounded-full text-blue-600 text-sm">
                 <span className="w-2 h-2 rounded-full bg-blue-600"></span>
                 Research & Development Club
               </div>
-              <h1 className="text-5xl lg:text-7xl font-bold leading-tight">
+              <h1 className="text-5xl lg:text-7xl font-bold leading-tight text-gray-900">
                 Pioneering the Future of{' '}
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-800">
                   Research
@@ -338,12 +347,12 @@ const Homepage: React.FC = () => {
       <section className="bg-white py-24">
         <div className="max-w-[1440px] mx-auto w-[90%]">
           <div className="text-center mb-16">
-            <span className="inline-block px-4 py-1 bg-orange-100 text-orange-600 
+            <span className="inline-block px-4 py-1 bg-blue-100 text-blue-600 
               rounded-full text-sm font-medium mb-4">
-              02 · Community
+              Community
             </span>
             <h2 className="text-4xl font-bold mb-6">
-              Join our  Research<br />
+              Join our Research<br />
               community at BUReD
             </h2>
             <p className="text-gray-600 max-w-3xl mx-auto text-lg">
@@ -532,11 +541,10 @@ const Homepage: React.FC = () => {
       {/* Press Releases Section */}
       <section className="bg-white py-24">
         <div className="max-w-[1440px] mx-auto w-[90%]">
-          {/* Header */}
           <div className="text-center mb-16">
-            <span className="inline-block px-4 py-1 bg-orange-100 text-orange-600 
+            <span className="inline-block px-4 py-1 bg-blue-100 text-blue-600 
               rounded-full text-sm font-medium mb-4">
-              04 · Recent Press Releases
+              Recent Press Releases
             </span>
             <h2 className="text-4xl font-bold mb-6">
               BUReD is making headlines
@@ -668,6 +676,101 @@ const Homepage: React.FC = () => {
                   d="M17 8l4 4m0 0l-4 4m4-4H3" />
               </svg>
             </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Upcoming Events Section */}
+      <section className="py-24 bg-white">
+        <div className="max-w-[1440px] mx-auto w-[90%]">
+          <div className="flex justify-between items-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-900">Upcoming Events</h2>
+            <Link 
+              to="/events" 
+              className="text-blue-600 hover:text-blue-700 transition-colors"
+            >
+              View All Events
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              {
+                title: "Research Workshop 2024",
+                date: "March 15, 2024",
+                time: "10:00 AM - 4:00 PM",
+                location: "BRAC University Auditorium",
+                image: "/photos/other/f5.jpg",
+                category: "Workshop"
+              },
+              {
+                title: "AI & Machine Learning Symposium",
+                date: "March 20, 2024",
+                time: "2:00 PM - 6:00 PM",
+                location: "CSE Building",
+                image: "/photos/other/f6.jpg",
+                category: "Symposium"
+              },
+              {
+                title: "Research Project Showcase",
+                date: "March 25, 2024",
+                time: "11:00 AM - 5:00 PM",
+                location: "BRAC University Campus",
+                image: "/photos/other/f1.jpg",
+                category: "Exhibition"
+              }
+            ].map((event, index) => (
+              <div 
+                key={index}
+                className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl 
+                  transition-all duration-300 group"
+              >
+                <div className="relative h-48 overflow-hidden">
+                  <img 
+                    src={event.image}
+                    alt={event.title}
+                    className="w-full h-full object-cover group-hover:scale-105 
+                      transition-transform duration-500"
+                  />
+                  <div className="absolute top-4 left-4">
+                    <span className="px-3 py-1 bg-blue-600 text-white text-sm rounded-full">
+                      {event.category}
+                    </span>
+                  </div>
+                </div>
+                <div className="p-6">
+                  <h3 className="text-xl font-bold mb-4 group-hover:text-blue-600 
+                    transition-colors">
+                    {event.title}
+                  </h3>
+                  <div className="space-y-2 text-gray-600">
+                    <div className="flex items-center gap-2">
+                      <svg className="w-5 h-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
+                          d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                      <span>{event.date}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <svg className="w-5 h-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
+                          d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      <span>{event.time}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <svg className="w-5 h-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
+                          d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
+                          d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                      </svg>
+                      <span>{event.location}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
