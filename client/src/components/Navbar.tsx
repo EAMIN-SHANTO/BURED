@@ -51,7 +51,7 @@ const Navbar: React.FC<NavbarProps> = ({ navigation }) => {
           <nav className="hidden md:flex items-center space-x-10">
             {navigation.map((item) => (
               <Link
-                key={item.name}
+                key={item.href}
                 to={item.href}
                 className={`text-sm font-medium transition-all duration-300 
                   ${location.pathname === item.href
