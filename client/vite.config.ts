@@ -5,7 +5,7 @@ import path from 'path'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: './',
+  base: '',
   publicDir: 'public',
   resolve: {
     alias: {
@@ -14,9 +14,21 @@ export default defineConfig({
   },
   build: {
     outDir: 'dist',
-    assetsDir: '',
+    assetsDir: 'assets',
     emptyOutDir: true,
     copyPublicDir: true,
+    rollupOptions: {
+      output: {
+        assetFileNames: (assetInfo) => {
+          if (assetInfo.name.endsWith('.png') || 
+              assetInfo.name.endsWith('.jpg') || 
+              assetInfo.name.endsWith('.svg')) {
+            return `${assetInfo.name}`
+          }
+          return 'assets/[name]-[hash][extname]'
+        },
+      },
+    },
   },
   server: {
     port: 3000,

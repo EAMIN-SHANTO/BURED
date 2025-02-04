@@ -1,4 +1,5 @@
 #!/bin/bash
 npm install
 npm run build
-cp -r public/* dist/ 
+mkdir -p dist/photos
+cp -r public/photos/* dist/photos/ 
