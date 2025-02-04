@@ -31,7 +31,7 @@ const Navbar: React.FC<NavbarProps> = ({ navigation }) => {
               <div className="absolute -inset-2 bg-blue-100 rounded-full opacity-0 
                 group-hover:opacity-100 blur-md transition-opacity duration-300" />
               <img 
-                src="/photos/logos/redlogo.png" 
+                src="photos/logos/redlogo.png" 
                 alt="BUReD Logo" 
                 className="h-14 w-auto relative"
               />

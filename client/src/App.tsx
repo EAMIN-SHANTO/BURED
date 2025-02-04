@@ -8,6 +8,7 @@ import About from './routes/About';
 import Panel from './routes/Panel';
 import Gallery from './routes/Gallery';
 import Blog from './routes/Blog';
+import ImageTest from './components/ImageTest';
 
 const App: React.FC = () => {
   return (
@@ -21,6 +22,7 @@ const App: React.FC = () => {
           <Route path="panel" element={<Panel />} />
           <Route path="gallery" element={<Gallery />} />
           <Route path="blog" element={<Blog />} />
+          <Route path="test" element={<ImageTest />} />
           <Route path="*" element={
             <div className="min-h-screen bg-gray-50 pt-20 flex items-center justify-center">
               <div className="text-center">
