@@ -110,22 +110,107 @@ const Homepage: React.FC = () => {
         </div>
       </section>
 
-      {/* Featured Research Section */}
-      <section className="py-24 bg-gray-50">
+      {/* Featured Articles Section */}
+      <section className="bg-white py-24">
         <div className="max-w-[1440px] mx-auto w-[90%]">
-          <div className="text-center mb-16">
-            <span className="inline-block px-4 py-1 bg-blue-100 text-blue-600 
-              rounded-full text-sm font-medium mb-4">
-              Featured Research
-            </span>
-            <h2 className="text-4xl font-bold mb-6">Our Latest Innovations</h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              Explore our groundbreaking research projects that are pushing 
-              the boundaries of innovation.
-            </p>
+          <div className="flex justify-between items-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-900">Recent Events</h2>
+            <Link 
+              to="/events" 
+              className="text-blue-600 hover:text-blue-700 transition-colors"
+            >
+              All Events
+            </Link>
           </div>
 
-          {/* Add your research projects grid here */}
+          <div className="grid grid-cols-12 gap-8">
+            {/* Main Featured Event */}
+            <div className="col-span-12 lg:col-span-7">
+              <Link to="/events/1" className="group block">
+                <div className="relative overflow-hidden rounded-2xl">
+                  <img 
+                    src="/photos/other/f1.jpg" 
+                    alt="Featured Event" 
+                    className="w-full h-[500px] object-cover transform group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 to-transparent"></div>
+                  <div className="absolute bottom-0 left-0 right-0 p-8">
+                    <div className="flex items-center gap-2 mb-4">
+                      <span className="px-3 py-1 bg-blue-600 text-white text-sm rounded-full">
+                        EVENT
+                      </span>
+                      <span className="text-white text-sm">02 Feb 2025</span>
+                    </div>
+                    <h3 className="text-2xl font-bold text-white mb-2">
+                      Architecture faculty attends MedGU-24 Conference in Spain
+                    </h3>
+                    <p className="text-gray-200">
+                      Exploring innovative approaches to sustainable architecture and urban planning...
+                    </p>
+                  </div>
+                </div>
+              </Link>
+            </div>
+
+            {/* Side Events */}
+            <div className="col-span-12 lg:col-span-5 space-y-6">
+              {[
+                {
+                  image: '/photos/other/f2.jpg',
+                  date: 'Monday, 9:00 pm',
+                  title: 'BRAC University Hosts Lecture on Climate Action with Dr. Eban Goodstein',
+                  day: '03',
+                  month: 'Feb',
+                  year: '2025'
+                },
+                {
+                  image: '/photos/other/f3.jpg',
+                  date: 'Sunday, 8:45 am',
+                  title: 'Research Team Wins International Robotics Competition',
+                  day: '02',
+                  month: 'Feb',
+                  year: '2025'
+                },
+                {
+                  image: '/photos/other/f4.jpg',
+                  date: 'Thursday, 10:30 am',
+                  title: 'BRAC University to Host Scholarly Exchange with NIT Silchar',
+                  day: '30',
+                  month: 'Jan',
+                  year: '2025'
+                }
+              ].map((event, index) => (
+                <Link 
+                  key={index} 
+                  to={`/events/${index + 2}`}
+                  className="flex gap-6 group"
+                >
+                  <div className="flex-none">
+                    <div className="bg-blue-50 rounded-lg p-4 text-center w-24">
+                      <span className="block text-2xl font-bold text-blue-600">
+                        {event.day}
+                      </span>
+                      <span className="block text-sm text-gray-600">
+                        {event.month}
+                      </span>
+                      <span className="block text-sm text-gray-400">
+                        {event.year}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex-1">
+                    <span className="block text-sm text-gray-500 mb-2">
+                      {event.date}
+                    </span>
+                    <h3 className="text-lg font-semibold text-gray-900 
+                      group-hover:text-blue-600 transition-colors">
+                      {event.title}
+                    </h3>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 
@@ -440,6 +525,149 @@ const Homepage: React.FC = () => {
                 </svg>
               </a>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Press Releases Section */}
+      <section className="bg-white py-24">
+        <div className="max-w-[1440px] mx-auto w-[90%]">
+          {/* Header */}
+          <div className="text-center mb-16">
+            <span className="inline-block px-4 py-1 bg-orange-100 text-orange-600 
+              rounded-full text-sm font-medium mb-4">
+              04 · Recent Press Releases
+            </span>
+            <h2 className="text-4xl font-bold mb-6">
+              BUReD is making headlines
+            </h2>
+            <p className="text-gray-600 max-w-3xl mx-auto text-lg">
+              From our innovative approaches to sustainable solutions to our 
+              growing community of enthusiasts, we're proud to share these 
+              stories that highlight our journey and impact in the field and beyond.
+            </p>
+          </div>
+
+          {/* Press Cards Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* Press Card 1 */}
+            <Link to="/press/1" className="group">
+              <div className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl 
+                transition-all duration-300">
+                <div className="relative h-64">
+                  <img 
+                    src="/photos/other/f1.jpg" 
+                    alt="Research News" 
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                </div>
+                <div className="p-6">
+                  <div className="flex items-center gap-4 mb-4">
+                    <span className="text-sm text-gray-500">May 6th, 2024</span>
+                    <span className="px-3 py-1 bg-blue-100 text-blue-600 rounded-full text-sm">
+                      Press
+                    </span>
+                  </div>
+                  <h3 className="text-xl font-bold mb-2 group-hover:text-blue-600 transition-colors">
+                    BUReD Phoenix: BRAC University's next-generation research initiative
+                  </h3>
+                  <p className="text-gray-600 text-sm line-clamp-2">
+                    BUReD's Phoenix, a next-generation research project from BRAC University, 
+                    has secured a spot in the finals of the University Research Challenge 2024...
+                  </p>
+                </div>
+                <div className="flex items-center gap-2 p-6 pt-0">
+                  <img src="/photos/logos/dailystar.png" alt="The Daily Star" className="h-8 w-auto" />
+                  <span className="text-sm text-gray-500">The Daily Star</span>
+                </div>
+              </div>
+            </Link>
+
+            {/* Press Card 2 */}
+            <Link to="/press/2" className="group">
+              <div className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl 
+                transition-all duration-300">
+                <div className="relative h-64">
+                  <img 
+                    src="/photos/other/f3.jpg" 
+                    alt="Research News" 
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                </div>
+                <div className="p-6">
+                  <div className="flex items-center gap-4 mb-4">
+                    <span className="text-sm text-gray-500">June 19th, 2023</span>
+                    <span className="px-3 py-1 bg-blue-100 text-blue-600 rounded-full text-sm">
+                      Press
+                    </span>
+                  </div>
+                  <h3 className="text-xl font-bold mb-2 group-hover:text-blue-600 transition-colors">
+                    From Challenges to Triumph: BUReD's Journey at the University Research Challenge
+                  </h3>
+                  <p className="text-gray-600 text-sm line-clamp-2">
+                    BUReD, one of the most successful research teams of Bangladesh, has done 
+                    wonders yet again in the recent University Research Challenge 2023...
+                  </p>
+                </div>
+                <div className="flex items-center gap-2 p-6 pt-0">
+                  <img src="/photos/logos/bracu.png" alt="BRACU Express" className="h-8 w-auto" />
+                  <span className="text-sm text-gray-500">BRACU Express</span>
+                </div>
+              </div>
+            </Link>
+
+            {/* Press Card 3 */}
+            <Link to="/press/3" className="group">
+              <div className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl 
+                transition-all duration-300">
+                <div className="relative h-64">
+                  <img 
+                    src="/photos/other/f4.jpg" 
+                    alt="Research News" 
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                </div>
+                <div className="p-6">
+                  <div className="flex items-center gap-4 mb-4">
+                    <span className="text-sm text-gray-500">July 17th, 2023</span>
+                    <span className="px-3 py-1 bg-blue-100 text-blue-600 rounded-full text-sm">
+                      Press
+                    </span>
+                  </div>
+                  <h3 className="text-xl font-bold mb-2 group-hover:text-blue-600 transition-colors">
+                    BUReD Research Club in University Research Challenge 2023 final
+                  </h3>
+                  <p className="text-gray-600 text-sm line-clamp-2">
+                    After several successful research projects and Bangladesh's first nano-satellite 
+                    'Onnesha', students of BRAC University have developed another groundbreaking project...
+                  </p>
+                </div>
+                <div className="flex items-center gap-2 p-6 pt-0">
+                  <img src="/photos/logos/bracu.png" alt="BRACU" className="h-8 w-auto" />
+                  <span className="text-sm text-gray-500">BRACU</span>
+                </div>
+              </div>
+            </Link>
+          </div>
+
+          {/* View All Link */}
+          <div className="text-center mt-12">
+            <Link 
+              to="/press"
+              className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 
+                transition-colors group"
+            >
+              <span>View All Press Releases</span>
+              <svg 
+                className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" 
+                fill="none" 
+                viewBox="0 0 24 24" 
+                stroke="currentColor"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
+                  d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </Link>
           </div>
         </div>
       </section>

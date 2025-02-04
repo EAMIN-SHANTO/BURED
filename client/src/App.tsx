@@ -4,6 +4,9 @@ import MainLayout from "./layouts/MainLayout";
 import Homepage from "./routes/Homepage";
 import Login from "./routes/Login";
 import Register from "./routes/Register";
+import About from './routes/About';
+import Panel from './routes/Panel';
+import Gallery from './routes/Gallery';
 
 const App: React.FC = () => {
   return (
@@ -13,6 +16,9 @@ const App: React.FC = () => {
           <Route index element={<Homepage />} />
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
+          <Route path="about" element={<About />} />
+          <Route path="panel" element={<Panel />} />
+          <Route path="gallery" element={<Gallery />} />
           <Route path="*" element={
             <div className="min-h-screen bg-gray-50 pt-20 flex items-center justify-center">
               <div className="text-center">
