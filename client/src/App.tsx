@@ -9,10 +9,10 @@ const App: React.FC = () => {
   return (
     <Router>
       <Routes>
-        <Route element={<MainLayout />}>
-          <Route path="/" element={<Homepage />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+        <Route path="/" element={<MainLayout />}>
+          <Route index element={<Homepage />} />
+          <Route path="login" element={<Login />} />
+          <Route path="register" element={<Register />} />
           <Route path="*" element={
             <div className="min-h-screen bg-gray-50 pt-20 flex items-center justify-center">
               <div className="text-center">
