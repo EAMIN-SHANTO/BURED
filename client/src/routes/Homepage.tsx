@@ -35,41 +35,97 @@ const Homepage: React.FC = () => {
 
   return (
     <div className="flex flex-col">
-      {/* Hero Section */}
-      <section className="relative min-h-screen bg-gradient-to-b from-blue-50 to-white">
-        <div className="absolute inset-0 opacity-5 pattern-dots"></div>
-        <div className="max-w-[1440px] mx-auto w-[90%] h-full flex items-center">
-          <div className="flex flex-col md:flex-row items-center gap-12 pt-20">
+      {/* Hero Section - Modern Gradient Background */}
+      <section className="relative min-h-screen bg-gradient-to-br from-blue-50 via-white to-gray-50">
+        <div className="absolute inset-0 bg-[url('/photos/other/grid.svg')] opacity-[0.03]" />
+        <div className="max-w-[1440px] mx-auto w-[90%] h-full">
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-16 pt-32">
             <div className="flex-1 space-y-8">
-              <h1 className="text-5xl md:text-6xl font-bold">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-100/50 
+                rounded-full text-blue-600 text-sm backdrop-blur-sm">
+                <span className="w-2 h-2 rounded-full bg-blue-600"></span>
+                Research & Development Club
+              </div>
+              <h1 className="text-5xl lg:text-7xl font-bold leading-tight">
                 Pioneering the Future of{' '}
-                <span className="text-blue-600">
-                  Research and Development
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-800">
+                  Research
                 </span>
               </h1>
-              <p className="text-xl text-gray-600 max-w-2xl">
-                BRACU RED is Bangladesh's premier student Research team, 
-                pushing the boundaries of innovation through advanced engineering. 
-                Join us as we inspire the next generation of tech leaders and 
-                showcase our nation's talent on the global stage.
+              <p className="text-xl text-gray-600 max-w-2xl leading-relaxed">
+                BRAC University Research for Development Club - Where innovation meets excellence. 
+                Join us in shaping tomorrow's technological landscape.
               </p>
-              <div className="flex gap-4">
-                <button className="px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-                  Learn more
-                </button>
-                <button className="px-8 py-3 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 transition-colors">
-                  Join Us!
-                </button>
+              <div className="flex flex-wrap gap-4">
+                <Link to="/about" 
+                  className="px-8 py-4 bg-blue-600 text-white rounded-xl hover:bg-blue-700 
+                    transition-all duration-300 shadow-lg shadow-blue-600/20 
+                    hover:shadow-xl hover:shadow-blue-600/30"
+                >
+                  Discover More
+                </Link>
+                <Link to="/join-us" 
+                  className="px-8 py-4 border-2 border-blue-600 text-blue-600 rounded-xl 
+                    hover:bg-blue-50 transition-all duration-300"
+                >
+                  Join BUReD
+                </Link>
               </div>
             </div>
             <div className="flex-1 relative">
+              <div className="absolute -inset-4 bg-gradient-to-r from-blue-100 to-blue-50 
+                rounded-full blur-3xl opacity-30 animate-pulse" />
               <img 
                 src="/photos/logos/redlogo.png" 
-                alt="BURED logo" 
-                className="w-full h-auto max-w-lg mx-auto"
+                alt="BUReD Logo" 
+                className="relative w-full h-auto max-w-xl mx-auto 
+                  drop-shadow-2xl transform hover:scale-105 transition-transform duration-500"
               />
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Stats Section */}
+      <section className="py-20 bg-white">
+        <div className="max-w-[1440px] mx-auto w-[90%]">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            <div className="text-center space-y-2">
+              <h3 className="text-4xl font-bold text-blue-600">50+</h3>
+              <p className="text-gray-600">Active Members</p>
+            </div>
+            <div className="text-center space-y-2">
+              <h3 className="text-4xl font-bold text-blue-600">20+</h3>
+              <p className="text-gray-600">Research Projects</p>
+            </div>
+            <div className="text-center space-y-2">
+              <h3 className="text-4xl font-bold text-blue-600">15+</h3>
+              <p className="text-gray-600">Publications</p>
+            </div>
+            <div className="text-center space-y-2">
+              <h3 className="text-4xl font-bold text-blue-600">10+</h3>
+              <p className="text-gray-600">Awards Won</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Featured Research Section */}
+      <section className="py-24 bg-gray-50">
+        <div className="max-w-[1440px] mx-auto w-[90%]">
+          <div className="text-center mb-16">
+            <span className="inline-block px-4 py-1 bg-blue-100 text-blue-600 
+              rounded-full text-sm font-medium mb-4">
+              Featured Research
+            </span>
+            <h2 className="text-4xl font-bold mb-6">Our Latest Innovations</h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">
+              Explore our groundbreaking research projects that are pushing 
+              the boundaries of innovation.
+            </p>
+          </div>
+
+          {/* Add your research projects grid here */}
         </div>
       </section>
 
@@ -282,38 +338,98 @@ const Homepage: React.FC = () => {
       </section>
 
       {/* Faculty Section */}
-      <section className="bg-gray-50/50 py-24">
-        <div className="max-w-[1440px] mx-auto w-[90%]">
-          <div className="text-center mb-16">
-            <span className="inline-block px-4 py-1 bg-blue-100 text-blue-600 
-              rounded-full text-sm font-medium mb-4">
-              03 · x
-            </span>
-            <h2 className="text-4xl font-bold mb-6">
-            Dr. Tarnima Warda <br />
-            Andalib
-            </h2>
-          </div>
+      <section className="relative bg-gradient-to-br from-gray-50 to-white py-32 overflow-hidden">
+        {/* Background Elements */}
+        <div className="absolute inset-0">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] 
+            bg-blue-100/30 rounded-full blur-3xl"></div>
+          <div className="absolute top-0 right-0 w-[600px] h-[600px] 
+            bg-orange-100/20 rounded-full blur-3xl"></div>
+        </div>
 
-          <div className="grid md:grid-cols-2 gap-16 items-center">
-            {/* Faculty Info */}
-            <div className="space-y-6">
-              <p className="text-gray-600 text-lg leading-relaxed">
-              Dr. Tarnima Warda Andalib is currently working as an Assistant Professor, BRAC Business School at BRAC University, Bangladesh. Earlier she was employed as a Post-Doctoral Fellow and Lecturer (Tutorial Laboratory of Strategic Management through MonsoonSim Game Simulation Course) in the School of Management at University Sains Malaysia, the only APEX (Accelerated Programs for Excellence) University in Malaysia from 2019 to 2021.
-              </p>
-              
-              {/* LinkedIn Connect Button */}
+        <div className="relative max-w-[1440px] mx-auto w-[90%]">
+          <div className="flex flex-col md:flex-row items-center gap-20">
+            {/* Image Column */}
+            <div className="md:w-1/2 relative">
+              <div className="relative">
+                {/* Decorative Elements */}
+                <div className="absolute -top-6 -left-6 w-24 h-24 bg-blue-100 rounded-full 
+                  mix-blend-multiply animate-pulse"></div>
+                <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-orange-100 rounded-full 
+                  mix-blend-multiply animate-pulse delay-300"></div>
+                
+                {/* Main Image Container */}
+                <div className="relative z-10 rounded-3xl overflow-hidden 
+                  shadow-2xl shadow-blue-900/20 aspect-square">
+                  <img 
+                    src="/photos/faculty/dr_tarnima.jpg" 
+                    alt="Dr. Tarnima Warda Andalib" 
+                    className="w-full h-full object-cover"
+                  />
+                  {/* Gradient Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-blue-900/40 to-transparent"></div>
+                </div>
+              </div>
+            </div>
+
+            {/* Content Column */}
+            <div className="md:w-1/2 space-y-8">
+              <div>
+                <span className="inline-flex items-center gap-2 px-4 py-2 
+                  bg-blue-100/50 rounded-full text-blue-600 text-sm backdrop-blur-sm mb-6">
+                  <span className="w-2 h-2 rounded-full bg-blue-600 animate-pulse"></span>
+                  Faculty Advisor
+                </span>
+                <h2 className="text-5xl font-bold mb-4 bg-gradient-to-r from-gray-900 to-gray-600 
+                  bg-clip-text text-transparent">
+                  Dr. Tarnima Warda Andalib
+                </h2>
+                <p className="text-lg text-blue-600 font-medium">
+                  Assistant Professor, BRAC Business School
+                </p>
+              </div>
+
+              <div className="space-y-6">
+                <p className="text-gray-600 text-lg leading-relaxed">
+                  Dr. Tarnima Warda Andalib is currently working as an Assistant Professor at BRAC Business School, 
+                  BRAC University, Bangladesh. Her expertise spans across strategic management, business simulation, 
+                  and organizational development.
+                </p>
+                <p className="text-gray-600 text-lg leading-relaxed">
+                  Previously served as a Post-Doctoral Fellow and Lecturer at the School of Management, 
+                  University Sains Malaysia - the only APEX University in Malaysia (2019-2021).
+                </p>
+              </div>
+
+              {/* Achievements Grid */}
+              <div className="grid grid-cols-2 gap-6 pt-6">
+                <div className="bg-white/50 backdrop-blur-sm rounded-2xl p-6 
+                  shadow-lg shadow-blue-100/20 hover:shadow-blue-200/30 
+                  transition-all duration-300 transform hover:-translate-y-1">
+                  <h3 className="text-4xl font-bold text-blue-600 mb-2">10+</h3>
+                  <p className="text-gray-600">Years of Academic Excellence</p>
+                </div>
+                <div className="bg-white/50 backdrop-blur-sm rounded-2xl p-6 
+                  shadow-lg shadow-blue-100/20 hover:shadow-blue-200/30 
+                  transition-all duration-300 transform hover:-translate-y-1">
+                  <h3 className="text-4xl font-bold text-blue-600 mb-2">50+</h3>
+                  <p className="text-gray-600">Research Publications</p>
+                </div>
+              </div>
+
+              {/* Connect Button */}
               <a 
-                href="https://linkedin.com/x" 
+                href="https://linkedin.com/in/dr-tarnima" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 
-                  transition-colors group"
+                className="inline-flex items-center gap-3 px-8 py-4 bg-blue-600 text-white 
+                  rounded-xl hover:bg-blue-700 transition-all duration-300 
+                  shadow-lg shadow-blue-600/20 group mt-6"
               >
                 <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
                 </svg>
-                <span className="font-medium">Learn More!</span>
+                <span>Connect on LinkedIn</span>
                 <svg 
                   className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" 
                   fill="none" 
@@ -323,17 +439,6 @@ const Homepage: React.FC = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
               </a>
-            </div>
-
-            {/* Faculty Image */}
-            <div className="relative">
-              <div className="aspect-square rounded-full overflow-hidden bg-blue-900">
-                <img 
-                  src="/photos/faculty/dr_Tarnima.jpg" 
-                  alt="faculty member" 
-                  className="w-full h-full object-cover"
-                />
-              </div>
             </div>
           </div>
         </div>
