@@ -1,28 +1,18 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Layout from "./routes/Layout.jsx";
-import Homepage from "./routes/Homepage.jsx";
+import MainLayout from "./layouts/MainLayout";
+import Homepage from "./routes/Homepage";
+import Login from "./routes/Login";
+import Register from "./routes/Register";
 
-
-
-
-import Login from "./routes/Login.jsx";
-import Register from "./routes/Register.jsx";
-
-const App = () => {
-  console.log('App rendered');
-
+const App: React.FC = () => {
   return (
     <Router>
-      <Layout>
-        <Routes>
-          {/* Each route should have its own unique component */}
+      <Routes>
+        <Route element={<MainLayout />}>
           <Route path="/" element={<Homepage />} />
-          
-          
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          
           <Route path="*" element={
             <div className="min-h-screen bg-gray-50 pt-20 flex items-center justify-center">
               <div className="text-center">
@@ -31,10 +21,10 @@ const App = () => {
               </div>
             </div>
           } />
-        </Routes>
-      </Layout>
+        </Route>
+      </Routes>
     </Router>
   );
 };
 
-export default App;
+export default App; 

@@ -2,27 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-body{
-    background-color: #e6e6ff;
-    width: 100vw;
-    overflow: hidden;
-    font-family: 'Montserrat', sans-serif;
-    overflow-x: hidden; 
-    overflow-y: auto; 
-}
-
-.animatedButton{
-    animation-duration: 10000ms;
-  }
-
-
-
-  .ql-container{
-    border: none !important;
-  }
-  .ql-toolbar{
-    border: none !important;
-  }
-  .ql-editor{
-    border: none !important;
-  }
+.pattern-dots {
+  background-image: radial-gradient(circle, #000 1px, transparent 1px);
+  background-size: 20px 20px;
+} 
