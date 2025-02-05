@@ -84,12 +84,12 @@ const Homepage: React.FC = () => {
             <div className="flex-1 relative">
               <div className="absolute -inset-4 bg-gradient-to-r from-blue-100 to-blue-50 
                 rounded-full blur-3xl opacity-30 animate-pulse" />
-              <img 
+              {/* <img 
                 src="photos/logos/redlogo.png" 
                 alt="BUReD Logo" 
                 className="relative w-full h-auto max-w-xl mx-auto 
                   drop-shadow-2xl transform hover:scale-105 transition-transform duration-500"
-              />
+              /> */}
             </div>
           </div>
         </div>
