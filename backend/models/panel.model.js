@@ -8,7 +8,7 @@ const panelSchema = new mongoose.Schema({
   role: {
     type: String,
     required: true,
-    enum: ['President', 'Vice President', 'Senior Executive', 'Member']
+    enum: ['President', 'Vice President', 'Director', 'Additional Director']
   },
   image: {
     type: String,

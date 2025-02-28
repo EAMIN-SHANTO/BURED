@@ -30,7 +30,7 @@ export const addPanelMember = async (req, res) => {
     }
 
     // Validate role
-    const validRoles = ['President', 'Vice President', 'Senior Executive', 'Member'];
+    const validRoles = ['President', 'Vice President', 'Director', 'Additional Director'];
     if (!validRoles.includes(role)) {
       return res.status(400).json({
         success: false,
@@ -79,7 +79,7 @@ export const updatePanelMember = async (req, res) => {
     }
 
     // Validate role
-    const validRoles = ['President', 'Vice President', 'Senior Executive', 'Member'];
+    const validRoles = ['President', 'Vice President', 'Director', 'Additional Director'];
     if (!validRoles.includes(role)) {
       return res.status(400).json({
         success: false,

@@ -46,7 +46,7 @@ const PanelManagement: React.FC = () => {
     }
   });
 
-  const roles = ['President', 'Vice President', 'Senior Executive', 'Member'];
+  const roles = ['President', 'Vice President', 'Director', 'Additional Director'];
 
   useEffect(() => {
     fetchMembers();

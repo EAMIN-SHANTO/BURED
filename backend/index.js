@@ -5,6 +5,9 @@ import connectDB from './lib/connectDB.js';
 import authRouter from './routes/auth.route.js';
 import adminRoutes from './routes/admin.route.js';
 import panelRoutes from './routes/panel.route.js';
+import galleryRoutes from './routes/gallery.route.js';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 dotenv.config();
 const app = express();
@@ -38,6 +41,17 @@ app.use((req, res, next) => {
 app.use('/api/auth', authRouter);
 app.use('/api/admin', adminRoutes);
 app.use('/api/panel', panelRoutes);
+app.use('/api/gallery', galleryRoutes);
+
+// Add this after your middleware configurations
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Serve static files from uploads directory with proper CORS
+app.use('/uploads', (req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  next();
+}, express.static(path.join(__dirname, 'uploads')));
 
 const PORT = process.env.PORT || 5001;
 
