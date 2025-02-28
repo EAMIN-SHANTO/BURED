@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from "react-router-dom";
 import { NavigationItem } from '../layouts/MainLayout';
+import { useAuth } from '../context/AuthContext';
 
 interface NavbarProps {
   navigation: NavigationItem[];
@@ -9,6 +10,7 @@ interface NavbarProps {
 const Navbar: React.FC<NavbarProps> = ({ navigation }) => {
   const location = useLocation();
   const [scrolled, setScrolled] = useState<boolean>(false);
+  const { user } = useAuth();
 
   useEffect(() => {
     const handleScroll = (): void => {
@@ -17,6 +19,29 @@ const Navbar: React.FC<NavbarProps> = ({ navigation }) => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  const getRoleIcon = (role?: string) => {
+    switch (role) {
+      case 'admin':
+        return (
+          <svg className="w-4 h-4 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z" />
+          </svg>
+        );
+      case 'staff':
+        return (
+          <svg className="w-4 h-4 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
+          </svg>
+        );
+      default:
+        return (
+          <svg className="w-4 h-4 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
+            <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+          </svg>
+        );
+    }
+  };
 
   return (
     <header 
@@ -65,21 +90,38 @@ const Navbar: React.FC<NavbarProps> = ({ navigation }) => {
           </nav>
 
           {/* Contact Button */}
-          <Link
-            to="/contact"
-            className="hidden md:inline-flex items-center gap-2 px-6 py-2.5 
+          <div className="flex items-center gap-4">
+            <Link to="/contact" className="hidden md:inline-flex items-center gap-2 px-6 py-2.5 
               bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl 
               text-sm font-medium transition-all duration-300 shadow-lg shadow-blue-600/20 
               hover:shadow-xl hover:shadow-blue-600/30 hover:scale-105 
-              hover:gap-3 active:scale-95"
-          >
-            <span>Contact Us</span>
-            <svg className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" 
-              fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
-                d="M17 8l4 4m0 0l-4 4m4-4H3" />
-            </svg>
-          </Link>
+              hover:gap-3 active:scale-95">
+              <span>Contact Us</span>
+              <svg className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" 
+                fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
+                  d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </Link>
+
+            {user ? (
+              <Link to="/profile" className="flex items-center gap-2 px-4 py-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors">
+                <div className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white">
+                  {user.username.charAt(0).toUpperCase()}
+                </div>
+                <span className="font-medium text-gray-700">{user.username}</span>
+                {user.role && (
+                  <div className="ml-1" title={`Role: ${user.role}`}>
+                    {getRoleIcon(user.role)}
+                  </div>
+                )}
+              </Link>
+            ) : (
+              <Link to="/login" className="flex items-center gap-2 px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700 transition-colors">
+                Sign In
+              </Link>
+            )}
+          </div>
 
           {/* Mobile Menu Button */}
           <button className="md:hidden p-2 rounded-xl text-gray-600 hover:bg-gray-100/80 

@@ -1,31 +1,28 @@
-import dotenv from 'dotenv';
 import express from 'express';
-dotenv.config();
-// import userRouter from './routes/user.route.js';
-// import postRouter from './routes/post.route.js';
-// import coommentRouter from './routes/comment.js';
+import dotenv from 'dotenv';
+import cookieParser from 'cookie-parser';
 import connectDB from './lib/connectDB.js';
+import authRouter from './routes/auth.route.js';
 
-
-
-
+dotenv.config();
 const app = express();
+
 app.use(express.json());
-const PORT = process.env.PORT || 3050;
+app.use(cookieParser());
 
-// Correct variable name, should be 'test' not 'text'
-// console.log('Text from .env:', process.env.test);  // Logs the value of 'test' from the .env file
+// CORS configuration
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  next();
+});
 
+// Routes
+app.use('/api/auth', authRouter);
 
-// app.get("/test", (req, res) => {
-
-//     res.status(200).send("It works!");
-// });
-
-// app.use('/users', userRouter);
-// app.use('/posts', postRouter);
-// app.use('/comments', coommentRouter);
-
+const PORT = process.env.PORT || 5001;
 
 app.listen(PORT, () => {
   connectDB();

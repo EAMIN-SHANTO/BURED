@@ -12,11 +12,9 @@ const MainLayout: React.FC = () => {
   const navigation: NavigationItem[] = [
     { name: 'Home', href: '/' },
     { name: 'About', href: '/about' },
-    { name: 'Community', href: '/community' },
-    { name: 'Panel', href: '/panel' },
+    { name: 'Current Panel', href: '/panel' },
     { name: 'Gallery', href: '/gallery' },
-    { name: 'Blog', href: '/blog' },
-    { name: 'Recent Press Releases', href: '/press' }
+    { name: 'Blog', href: '/blog' }
   ];
 
   return (
