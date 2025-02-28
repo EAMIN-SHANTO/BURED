@@ -248,23 +248,56 @@ const GalleryManagement: React.FC = () => {
       </div>
 
       {/* Gallery Items List */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {items.map((item) => (
-          <div key={item._id} className="bg-white rounded-lg shadow-sm overflow-hidden">
-            <img
-              src={`${API_URL}${item.image}`}
-              alt={item.title}
-              className="w-full h-48 object-cover"
-            />
-            <div className="p-4">
-              <h3 className="text-lg font-semibold">{item.title}</h3>
-              <p className="text-sm text-gray-600 mt-1">{item.description}</p>
-              <div className="mt-4 flex justify-between items-center">
-                <span className="text-sm text-gray-500">{item.category}</span>
-                <div className="flex space-x-2">
+      <div className="bg-white shadow-sm rounded-lg overflow-hidden">
+        <table className="min-w-full divide-y divide-gray-200">
+          <thead className="bg-gray-50">
+            <tr>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Image
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Title
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Category
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Description
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Actions
+              </th>
+            </tr>
+          </thead>
+          <tbody className="bg-white divide-y divide-gray-200">
+            {items.map((item) => (
+              <tr key={item._id}>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <div className="h-20 w-20 flex-shrink-0">
+                    <img
+                      src={`${API_URL}${item.image}`}
+                      alt={item.title}
+                      className="h-20 w-20 object-cover rounded-lg"
+                    />
+                  </div>
+                </td>
+                <td className="px-6 py-4">
+                  <div className="text-sm font-medium text-gray-900">{item.title}</div>
+                </td>
+                <td className="px-6 py-4">
+                  <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                    {item.category}
+                  </span>
+                </td>
+                <td className="px-6 py-4">
+                  <div className="text-sm text-gray-500 max-w-xs truncate">
+                    {item.description}
+                  </div>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                   <button
                     onClick={() => handleEdit(item)}
-                    className="text-blue-600 hover:text-blue-900"
+                    className="text-blue-600 hover:text-blue-900 mr-3"
                   >
                     <FaEdit className="h-5 w-5" />
                   </button>
@@ -274,11 +307,17 @@ const GalleryManagement: React.FC = () => {
                   >
                     <FaTrash className="h-5 w-5" />
                   </button>
-                </div>
-              </div>
-            </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        {items.length === 0 && (
+          <div className="text-center py-8 text-gray-500">
+            No gallery items found.
           </div>
-        ))}
+        )}
       </div>
     </div>
   );

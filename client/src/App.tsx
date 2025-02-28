@@ -8,6 +8,7 @@ import About from './routes/About';
 import Panel from './routes/Panel';
 import Gallery from './routes/Gallery';
 import Blog from './routes/Blog';
+import BlogPost from './routes/BlogPost';
 import ImageTest from './components/ImageTest';
 import Profile from './routes/Profile';
 import { AuthProvider } from './context/AuthContext';
@@ -54,6 +55,7 @@ const App: React.FC = () => {
             <Route path="panel" element={<Panel />} />
             <Route path="gallery" element={<Gallery />} />
             <Route path="blog" element={<Blog />} />
+            <Route path="blog/:slug" element={<BlogPost />} />
             <Route path="test" element={<ImageTest />} />
             <Route path="*" element={
               <div className="min-h-screen bg-gray-50 pt-20 flex items-center justify-center">

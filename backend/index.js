@@ -6,6 +6,7 @@ import authRouter from './routes/auth.route.js';
 import adminRoutes from './routes/admin.route.js';
 import panelRoutes from './routes/panel.route.js';
 import galleryRoutes from './routes/gallery.route.js';
+import blogRoutes from './routes/blog.route.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -42,6 +43,7 @@ app.use('/api/auth', authRouter);
 app.use('/api/admin', adminRoutes);
 app.use('/api/panel', panelRoutes);
 app.use('/api/gallery', galleryRoutes);
+app.use('/api/blog', blogRoutes);
 
 // Add this after your middleware configurations
 const __filename = fileURLToPath(import.meta.url);
@@ -50,6 +52,8 @@ const __dirname = path.dirname(__filename);
 // Serve static files from uploads directory with proper CORS
 app.use('/uploads', (req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Cache-Control', 'public, max-age=86400');
+  console.log('Serving file:', req.url); // Add this for debugging
   next();
 }, express.static(path.join(__dirname, 'uploads')));
 
