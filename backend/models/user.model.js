@@ -5,11 +5,13 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     unique: true,
+    trim: true,
   },
   email: {
     type: String,
     required: true,
     unique: true,
+    trim: true,
   },
   password: {
     type: String,
@@ -17,17 +19,24 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['user', 'admin', 'staff'],
+    enum: ['user', 'staff', 'admin'],
     default: 'user'
+  },
+  position: {
+    type: String,
+    default: ''
   },
   fullName: String,
   studentId: String,
   department: String,
   batch: String,
   phone: String,
-  position: String,
   bio: String,
-  img: String,
-}, { timestamps: true });
+  img: String
+}, {
+  timestamps: true
+});
 
-export default mongoose.model("User", userSchema);
+const User = mongoose.model("User", userSchema);
+
+export default User;

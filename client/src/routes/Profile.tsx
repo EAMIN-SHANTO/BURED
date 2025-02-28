@@ -116,7 +116,7 @@ const Profile: React.FC = () => {
 
   const handleLogout = async () => {
     try {
-      const res = await fetch('http://localhost:5001/api/auth/logout', {
+      const res = await fetch(`${API_URL}/api/auth/logout`, {
         method: 'GET',
         credentials: 'include',
       });
@@ -124,6 +124,7 @@ const Profile: React.FC = () => {
       const data = await res.json();
 
       if (data.success) {
+        setUser(null);
         navigate('/login');
       }
     } catch (err) {

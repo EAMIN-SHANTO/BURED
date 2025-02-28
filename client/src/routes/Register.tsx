@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 interface RegisterData {
   username: string;
@@ -10,6 +11,8 @@ interface RegisterData {
 
 const Register: React.FC = () => {
   const navigate = useNavigate();
+  const { setUser } = useAuth();
+  const API_URL = import.meta.env.VITE_API_URL;
   const [formData, setFormData] = useState<RegisterData>({
     username: '',
     email: '',
@@ -29,17 +32,13 @@ const Register: React.FC = () => {
     }
 
     try {
-      const res = await fetch('http://localhost:5001/api/auth/register', {
+      const res = await fetch(`${API_URL}/api/auth/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         credentials: 'include',
-        body: JSON.stringify({
-          username: formData.username,
-          email: formData.email,
-          password: formData.password
-        }),
+        body: JSON.stringify(formData),
       });
 
       const data = await res.json();
@@ -49,8 +48,8 @@ const Register: React.FC = () => {
         return;
       }
 
-      // Redirect to login page on successful registration
-      navigate('/login');
+      setUser(data.user);
+      navigate('/');
     } catch (err) {
       setError('Something went wrong');
     }
@@ -152,7 +151,7 @@ const Register: React.FC = () => {
                 type="submit"
                 className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
               >
-                Create Account
+                Register
               </button>
             </div>
           </form>
