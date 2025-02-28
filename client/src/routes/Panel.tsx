@@ -1,102 +1,76 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+
+// SVG icons as components
+const TwitterIcon = () => (
+  <svg className="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+  </svg>
+);
+
+const LinkedInIcon = () => (
+  <svg className="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+  </svg>
+);
 
 interface Member {
+  _id: string;
   name: string;
   role: string;
   image: string;
   department: string;
-  twitter?: string;
-  linkedin?: string;
+  socialLinks: {
+    twitter?: string;
+    linkedin?: string;
+  };
 }
 
 const Panel: React.FC = () => {
-  const president: Member[] = [
-    {
-      name: "Member X1",
-      role: "President",
-      image: "/photos/other/avt.jpg",
-      department: "Computer Science & Engineering",
-      twitter: "https://twitter.com/x1",
-      linkedin: "https://linkedin.com/in/x1"
-    }
-  ];
+  const [members, setMembers] = useState<{
+    president: Member[];
+    vicePresident: Member[];
+    seniorExecutives: Member[];
+    members: Member[];
+  }>({
+    president: [],
+    vicePresident: [],
+    seniorExecutives: [],
+    members: []
+  });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const API_URL = import.meta.env.VITE_API_URL;
 
-  const vicePresident: Member[] = [
-    {
-      name: "Member X2",
-      role: "Vice President",
-      image: "/photos/other/avt.jpg",
-      department: "Computer Science & Engineering",
-      twitter: "https://twitter.com/x2",
-      linkedin: "https://linkedin.com/in/x2"
-    }
-  ];
+  useEffect(() => {
+    const fetchMembers = async () => {
+      try {
+        const res = await fetch(`${API_URL}/api/panel`);
+        const data = await res.json();
 
-  const seniorExecutives: Member[] = [
-    {
-      name: "Member X3",
-      role: "Senior Executive",
-      image: "/photos/other/avt.jpg",
-      department: "Computer Science & Engineering",
-      twitter: "https://twitter.com/x3",
-      linkedin: "https://linkedin.com/in/x3"
-    },
-    {
-      name: "Member X4",
-      role: "Senior Executive",
-      image: "/photos/other/avt.jpg",
-      department: "Computer Science & Engineering",
-      twitter: "https://twitter.com/x4",
-      linkedin: "https://linkedin.com/in/x4"
-    },
-    {
-      name: "Member X5",
-      role: "Senior Executive",
-      image: "/photos/other/avt.jpg",
-      department: "Computer Science & Engineering",
-      twitter: "https://twitter.com/x5",
-      linkedin: "https://linkedin.com/in/x5"
-    }
-  ];
+        if (data.success) {
+          // Sort members by role
+          const sortedMembers = {
+            president: data.members.filter((m: Member) => m.role === 'President'),
+            vicePresident: data.members.filter((m: Member) => m.role === 'Vice President'),
+            seniorExecutives: data.members.filter((m: Member) => m.role === 'Senior Executive'),
+            members: data.members.filter((m: Member) => m.role === 'Member')
+          };
+          setMembers(sortedMembers);
+        } else {
+          setError('Failed to fetch panel members');
+        }
+      } catch (err) {
+        setError('Failed to fetch panel members');
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const members: Member[] = [
-    {
-      name: "Member X6",
-      role: "Member",
-      image: "/photos/other/avt.jpg",
-      department: "Computer Science & Engineering",
-      twitter: "https://twitter.com/x6",
-      linkedin: "https://linkedin.com/in/x6"
-    },
-    {
-      name: "Member X7",
-      role: "Member",
-      image: "/photos/other/avt.jpg",
-      department: "Computer Science & Engineering",
-      twitter: "https://twitter.com/x7",
-      linkedin: "https://linkedin.com/in/x7"
-    },
-    {
-      name: "Member X8",
-      role: "Member",
-      image: "/photos/other/avt.jpg",
-      department: "Computer Science & Engineering",
-      twitter: "https://twitter.com/x8",
-      linkedin: "https://linkedin.com/in/x8"
-    },
-    {
-      name: "Member X9",
-      role: "Member",
-      image: "/photos/other/avt.jpg",
-      department: "Computer Science & Engineering",
-      twitter: "https://twitter.com/x9",
-      linkedin: "https://linkedin.com/in/x9"
-    }
-  ];
+    fetchMembers();
+  }, [API_URL]);
 
   const MemberCard: React.FC<{ member: Member }> = ({ member }) => (
     <div className="flex flex-col items-center text-center">
-      {/* Profile Image */}
       <div className="mb-4 relative group">
         <div className="w-48 h-48 rounded-full overflow-hidden">
           <img 
@@ -107,15 +81,14 @@ const Panel: React.FC = () => {
         </div>
       </div>
 
-      {/* Member Info */}
       <h3 className="text-xl font-bold text-gray-900">{member.name}</h3>
-      <p className="text-gray-600 mb-4">{member.role}</p>
+      <p className="text-gray-600 mb-1">{member.role}</p>
+      <p className="text-gray-500 mb-4 text-sm">{member.department}</p>
 
-      {/* Social Links */}
       <div className="flex items-center gap-4">
-        {member.twitter && (
+        {member.socialLinks.twitter && (
           <a 
-            href={member.twitter}
+            href={member.socialLinks.twitter}
             target="_blank"
             rel="noopener noreferrer"
             className="text-gray-400 hover:text-gray-600 transition-colors"
@@ -125,9 +98,9 @@ const Panel: React.FC = () => {
             </svg>
           </a>
         )}
-        {member.linkedin && (
+        {member.socialLinks.linkedin && (
           <a 
-            href={member.linkedin}
+            href={member.socialLinks.linkedin}
             target="_blank"
             rel="noopener noreferrer"
             className="text-gray-400 hover:text-gray-600 transition-colors"
@@ -148,11 +121,18 @@ const Panel: React.FC = () => {
     </div>
   );
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 pt-16 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col pt-24">
       {/* Hero Section */}
       <section className="relative py-32 overflow-hidden">
-        {/* Background Image and Overlay */}
         <div className="absolute inset-0">
           <img 
             src="/photos/other/resa.jpg"
@@ -182,53 +162,69 @@ const Panel: React.FC = () => {
         </div>
       </section>
 
-      {/* President Section */}
-      <section className="py-20 bg-white">
-        <div className="max-w-[1440px] mx-auto w-[90%]">
-          <SectionTitle title="President" />
-          <div className="max-w-lg mx-auto">
-            {president.map((member, index) => (
-              <MemberCard key={index} member={member} />
-            ))}
+      {error && (
+        <div className="max-w-[1440px] mx-auto w-[90%] mt-8">
+          <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg">
+            {error}
           </div>
         </div>
-      </section>
+      )}
+
+      {/* President Section */}
+      {members.president.length > 0 && (
+        <section className="py-20 bg-white">
+          <div className="max-w-[1440px] mx-auto w-[90%]">
+            <SectionTitle title="President" />
+            <div className="max-w-lg mx-auto">
+              {members.president.map((member) => (
+                <MemberCard key={member._id} member={member} />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Vice President Section */}
-      <section className="py-20 bg-gray-50">
-        <div className="max-w-[1440px] mx-auto w-[90%]">
-          <SectionTitle title="Vice President" />
-          <div className="max-w-lg mx-auto">
-            {vicePresident.map((member, index) => (
-              <MemberCard key={index} member={member} />
-            ))}
+      {members.vicePresident.length > 0 && (
+        <section className="py-20 bg-gray-50">
+          <div className="max-w-[1440px] mx-auto w-[90%]">
+            <SectionTitle title="Vice President" />
+            <div className="max-w-lg mx-auto">
+              {members.vicePresident.map((member) => (
+                <MemberCard key={member._id} member={member} />
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Senior Executives Section */}
-      <section className="py-20 bg-white">
-        <div className="max-w-[1440px] mx-auto w-[90%]">
-          <SectionTitle title="Senior Executives" />
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-8 gap-y-16">
-            {seniorExecutives.map((member, index) => (
-              <MemberCard key={index} member={member} />
-            ))}
+      {members.seniorExecutives.length > 0 && (
+        <section className="py-20 bg-white">
+          <div className="max-w-[1440px] mx-auto w-[90%]">
+            <SectionTitle title="Senior Executives" />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16">
+              {members.seniorExecutives.map((member) => (
+                <MemberCard key={member._id} member={member} />
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Members Section */}
-      <section className="py-20 bg-gray-50">
-        <div className="max-w-[1440px] mx-auto w-[90%]">
-          <SectionTitle title="Members" />
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-8 gap-y-16">
-            {members.map((member, index) => (
-              <MemberCard key={index} member={member} />
-            ))}
+      {members.members.length > 0 && (
+        <section className="py-20 bg-gray-50">
+          <div className="max-w-[1440px] mx-auto w-[90%]">
+            <SectionTitle title="Members" />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16">
+              {members.members.map((member) => (
+                <MemberCard key={member._id} member={member} />
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
     </div>
   );
 };

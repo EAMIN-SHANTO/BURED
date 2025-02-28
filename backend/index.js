@@ -4,6 +4,7 @@ import cookieParser from 'cookie-parser';
 import connectDB from './lib/connectDB.js';
 import authRouter from './routes/auth.route.js';
 import adminRoutes from './routes/admin.route.js';
+import panelRoutes from './routes/panel.route.js';
 
 dotenv.config();
 const app = express();
@@ -36,6 +37,7 @@ app.use((req, res, next) => {
 // Routes
 app.use('/api/auth', authRouter);
 app.use('/api/admin', adminRoutes);
+app.use('/api/panel', panelRoutes);
 
 const PORT = process.env.PORT || 5001;
 
