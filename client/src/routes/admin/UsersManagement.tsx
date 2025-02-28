@@ -16,6 +16,7 @@ const UsersManagement: React.FC = () => {
   const [error, setError] = useState('');
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const { user: currentUser } = useAuth();
+  const API_URL = import.meta.env.VITE_API_URL;
 
   const [editForm, setEditForm] = useState({
     role: '',
@@ -23,31 +24,36 @@ const UsersManagement: React.FC = () => {
   });
 
   useEffect(() => {
-    fetchUsers();
-  }, []);
+    const fetchUsers = async () => {
+      try {
+        const res = await fetch(`${API_URL}/api/admin/users`, {
+          credentials: 'include',
+        });
 
-  const fetchUsers = async () => {
-    try {
-      const res = await fetch('http://localhost:5001/api/admin/users', {
-        credentials: 'include'
-      });
-      const data = await res.json();
+        if (!res.ok) {
+          throw new Error('Failed to fetch users');
+        }
 
-      if (data.success) {
-        setUsers(data.users);
-      } else {
-        setError(data.message);
+        const data = await res.json();
+        if (data.success) {
+          setUsers(data.users);
+        } else {
+          setError(data.message);
+        }
+      } catch (err) {
+        setError('Failed to fetch users');
+        console.error(err);
+      } finally {
+        setLoading(false);
       }
-    } catch (err) {
-      setError('Failed to fetch users');
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
+
+    fetchUsers();
+  }, [API_URL]);
 
   const handleUpdateUser = async (userId: string) => {
     try {
-      const res = await fetch(`http://localhost:5001/api/admin/users/${userId}`, {
+      const res = await fetch(`${API_URL}/api/admin/users/${userId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
