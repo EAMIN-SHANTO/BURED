@@ -20,6 +20,7 @@ import PanelManagement from './routes/admin/PanelManagement';
 import AboutManagement from './routes/admin/AboutManagement';
 import GalleryManagement from './routes/admin/GalleryManagement';
 import BlogManagement from './routes/admin/BlogManagement';
+import RegistrationInbox from './routes/admin/RegistrationInbox';
 
 // Add this configuration object
 const routerConfig = {
@@ -88,6 +89,7 @@ const App: React.FC = () => {
             <Route path="about" element={<AboutManagement />} />
             <Route path="gallery" element={<GalleryManagement />} />
             <Route path="blog" element={<BlogManagement />} />
+            <Route path="inbox" element={<RegistrationInbox />} />
           </Route>
         </Routes>
       </Router>

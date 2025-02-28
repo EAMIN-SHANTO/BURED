@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from "react-router-dom";
+import RegistrationForm from '../components/RegistrationForm';
 
 
 // Interface for Featured Media
@@ -17,6 +18,8 @@ interface TechnologyPartner {
 }
 
 const Homepage: React.FC = () => {
+  const [showRegistrationForm, setShowRegistrationForm] = useState(false);
+
   const featuredMedia: FeaturedMedia[] = [
     { logo: "/photos/media/dailystar.png", alt: "The Daily Star", url: "#" },
     { logo: "/photos/media/somoytv.png", alt: "Somoy TV", url: "#" },
@@ -837,6 +840,29 @@ const Homepage: React.FC = () => {
           </div>
         </div>
       </section>
+
+      {/* Join Section */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl font-bold text-gray-900">Join Our Team</h2>
+          <p className="mt-4 text-lg text-gray-600">
+            Interested in robotics and research? Join BUReD and be part of something amazing!
+          </p>
+          <button
+            onClick={() => setShowRegistrationForm(true)}
+            className="mt-8 px-8 py-3 bg-blue-600 text-white rounded-lg 
+              hover:bg-blue-700 transition-colors duration-300 shadow-lg 
+              hover:shadow-xl transform hover:-translate-y-0.5"
+          >
+            Join BUReD
+          </button>
+        </div>
+      </section>
+
+      {/* Registration Form Modal */}
+      {showRegistrationForm && (
+        <RegistrationForm onClose={() => setShowRegistrationForm(false)} />
+      )}
     </div>
   );
 };

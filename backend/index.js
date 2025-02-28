@@ -7,6 +7,7 @@ import adminRoutes from './routes/admin.route.js';
 import panelRoutes from './routes/panel.route.js';
 import galleryRoutes from './routes/gallery.route.js';
 import blogRoutes from './routes/blog.route.js';
+import registrationRoutes from './routes/registration.route.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -44,6 +45,7 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/panel', panelRoutes);
 app.use('/api/gallery', galleryRoutes);
 app.use('/api/blog', blogRoutes);
+app.use('/api/registration', registrationRoutes);
 
 // Add this after your middleware configurations
 const __filename = fileURLToPath(import.meta.url);
@@ -56,6 +58,23 @@ app.use('/uploads', (req, res, next) => {
   console.log('Serving file:', req.url); // Add this for debugging
   next();
 }, express.static(path.join(__dirname, 'uploads')));
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({
+    success: false,
+    message: 'Something went wrong!'
+  });
+});
+
+// 404 handler
+app.use((req, res) => {
+  res.status(404).json({
+    success: false,
+    message: 'Route not found'
+  });
+});
 
 const PORT = process.env.PORT || 5001;
 

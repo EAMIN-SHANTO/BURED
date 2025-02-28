@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { FaInbox } from 'react-icons/fa';
 
 const AdminDashboard: React.FC = () => {
   const location = useLocation();
@@ -15,6 +16,7 @@ const AdminDashboard: React.FC = () => {
     { name: 'About Page', href: '/admin/about' },
     { name: 'Gallery', href: '/admin/gallery' },
     { name: 'Blog Posts', href: '/admin/blog' },
+    { name: 'Registration Inbox', href: '/admin/inbox' }
   ];
 
   if (!user || (user.role !== 'admin' && user.role !== 'staff')) {

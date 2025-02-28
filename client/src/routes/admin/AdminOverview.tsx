@@ -1,8 +1,39 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
+import { FaInbox } from 'react-icons/fa';
 
 const AdminOverview: React.FC = () => {
-  const { user } = useAuth();
+  const { user, API_URL } = useAuth();
+  const [stats, setStats] = useState({
+    unreadRegistrations: 0
+  });
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        // Fetch registration stats
+        const regRes = await fetch(`${API_URL}/api/registration`, {
+          credentials: 'include'
+        });
+        const regData = await regRes.json();
+        
+        if (regData.success) {
+          const unreadCount = regData.registrations.filter(
+            (reg: any) => reg.status === 'unread'
+          ).length;
+          
+          setStats(prev => ({
+            ...prev,
+            unreadRegistrations: unreadCount
+          }));
+        }
+      } catch (error) {
+        console.error('Error fetching stats:', error);
+      }
+    };
+
+    fetchStats();
+  }, [API_URL]);
 
   return (
     <div className="container mx-auto px-4">
@@ -48,6 +79,17 @@ const AdminOverview: React.FC = () => {
               </span>
             </div>
           </div>
+        </div>
+
+        <div className="bg-white rounded-lg shadow p-6">
+          <div className="flex items-center justify-between">
+            <h3 className="text-lg font-medium text-gray-900">New Registrations</h3>
+            <FaInbox className="w-5 h-5 text-blue-500" />
+          </div>
+          <p className="mt-2 text-3xl font-bold text-blue-600">
+            {stats.unreadRegistrations}
+          </p>
+          <p className="mt-1 text-sm text-gray-500">Unread requests</p>
         </div>
       </div>
     </div>

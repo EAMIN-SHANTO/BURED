@@ -14,6 +14,9 @@ interface AuthContextType {
   user: User | null;
   setUser: React.Dispatch<React.SetStateAction<User | null>>;
   loading: boolean;
+  login: (token: string) => void;
+  logout: () => void;
+  API_URL: string;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -57,8 +60,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     checkAuth();
   }, [API_URL]);
 
+  const login = (token: string) => {
+    // Implementation of login
+  };
+
+  const logout = () => {
+    // Implementation of logout
+  };
+
   return (
-    <AuthContext.Provider value={{ user, setUser, loading }}>
+    <AuthContext.Provider value={{ user, setUser, loading, login, logout, API_URL }}>
       {children}
     </AuthContext.Provider>
   );
