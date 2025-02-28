@@ -28,7 +28,13 @@ const PORT = process.env.PORT || 3050;
 
 
 app.listen(PORT, () => {
-
-    connectDB();
-    console.log("Server is running ");
+  connectDB();
+  console.log(`Server is running on port ${PORT}`);
+}).on('error', (err) => {
+  if (err.code === 'EADDRINUSE') {
+    console.log(`Port ${PORT} is busy, trying ${PORT + 1}`);
+    app.listen(PORT + 1);
+  } else {
+    console.error(err);
+  }
 });
