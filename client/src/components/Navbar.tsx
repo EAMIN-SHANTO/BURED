@@ -80,13 +80,15 @@ const Navbar: React.FC<NavbarProps> = ({ navigation }) => {
           <nav className="hidden md:flex items-center space-x-10">
             {navigation.map((item) => (
               <Link
-                key={item.href}
+                key={item.name}
                 to={item.href}
-                className={`text-sm font-medium transition-all duration-300 
-                  ${location.pathname === item.href
-                    ? 'text-blue-600'
-                    : 'text-gray-600 hover:text-blue-600'
-                  }`}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 ${
+                  item.name === 'Publications' 
+                    ? 'bg-blue-600 text-white hover:bg-blue-700' 
+                    : location.pathname === item.href
+                    ? 'bg-gray-100 text-gray-900'
+                    : 'text-gray-600 hover:bg-gray-100'
+                }`}
               >
                 {item.name}
               </Link>
