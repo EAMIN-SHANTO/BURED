@@ -4,7 +4,9 @@ interface User {
   id: string;
   username: string;
   email: string;
-  role?: string;
+  role: string;
+  fullName?: string;
+  position?: string;
   img?: string;
 }
 
@@ -19,27 +21,41 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const API_URL = import.meta.env.VITE_API_URL;
+
+  console.log('API URL:', API_URL);
 
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const res = await fetch('http://localhost:5001/api/auth/profile', {
+        console.log('Checking auth at:', `${API_URL}/api/auth/profile`);
+        const res = await fetch(`${API_URL}/api/auth/profile`, {
           credentials: 'include',
         });
+        
+        if (!res.ok) {
+          setUser(null);
+          setLoading(false);
+          return;
+        }
+
         const data = await res.json();
         
         if (data.success) {
           setUser(data.user);
+        } else {
+          setUser(null);
         }
       } catch (err) {
         console.error('Auth check failed:', err);
+        setUser(null);
       } finally {
         setLoading(false);
       }
     };
 
     checkAuth();
-  }, []);
+  }, [API_URL]);
 
   return (
     <AuthContext.Provider value={{ user, setUser, loading }}>

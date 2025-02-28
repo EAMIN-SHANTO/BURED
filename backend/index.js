@@ -3,35 +3,63 @@ import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import connectDB from './lib/connectDB.js';
 import authRouter from './routes/auth.route.js';
+import adminRoutes from './routes/admin.route.js';
 
 dotenv.config();
 const app = express();
 
+// Middleware
 app.use(express.json());
 app.use(cookieParser());
 
 // CORS configuration
 app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  // Allow multiple origins
+  const allowedOrigins = ['http://localhost:3000', 'http://localhost:5173'];
+  const origin = req.headers.origin;
+  
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  }
+
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   res.setHeader('Access-Control-Allow-Credentials', 'true');
+  
+  // Handle preflight requests
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(200);
+  }
   next();
 });
 
 // Routes
 app.use('/api/auth', authRouter);
+app.use('/api/admin', adminRoutes);
 
 const PORT = process.env.PORT || 5001;
 
-app.listen(PORT, () => {
-  connectDB();
-  console.log(`Server is running on port ${PORT}`);
-}).on('error', (err) => {
-  if (err.code === 'EADDRINUSE') {
-    console.log(`Port ${PORT} is busy, trying ${PORT + 1}`);
-    app.listen(PORT + 1);
-  } else {
-    console.error(err);
+// Start server
+const startServer = async () => {
+  try {
+    // Connect to MongoDB first
+    await connectDB();
+    console.log('Connected to MongoDB');
+
+    // Then start the server
+    app.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT}`);
+    });
+  } catch (error) {
+    console.error('Failed to start server:', error);
+    process.exit(1); // Exit if we can't connect to MongoDB
   }
+};
+
+// Error handling
+process.on('unhandledRejection', (err) => {
+  console.error('Unhandled Promise Rejection:', err);
+  process.exit(1);
 });
+
+startServer();

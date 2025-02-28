@@ -33,6 +33,8 @@ const Profile: React.FC = () => {
   const [error, setError] = useState<string>('');
   const [success, setSuccess] = useState<string>('');
   const [isEditing, setIsEditing] = useState(false);
+  const API_URL = import.meta.env.VITE_API_URL;
+
   const [formData, setFormData] = useState<UpdateableFields>({
     fullName: '',
     studentId: '',
@@ -45,9 +47,14 @@ const Profile: React.FC = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await fetch('http://localhost:5001/api/auth/profile', {
+        console.log('Fetching user profile from:', `${API_URL}/api/auth/profile`);
+        const res = await fetch(`${API_URL}/api/auth/profile`, {
           credentials: 'include',
         });
+
+        if (!res.ok) {
+          throw new Error('Failed to fetch user data');
+        }
 
         const data = await res.json();
 
@@ -67,13 +74,14 @@ const Profile: React.FC = () => {
           bio: data.user.bio || ''
         });
       } catch (err) {
+        console.error('Failed to fetch user:', err);
         setError('Failed to fetch user data');
         navigate('/login');
       }
     };
 
     fetchUser();
-  }, [navigate]);
+  }, [API_URL, navigate]);
 
   const handleUpdate = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -81,7 +89,7 @@ const Profile: React.FC = () => {
     setSuccess('');
 
     try {
-      const res = await fetch('http://localhost:5001/api/auth/update-profile', {
+      const res = await fetch(`${API_URL}/api/auth/update-profile`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

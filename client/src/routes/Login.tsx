@@ -10,18 +10,22 @@ interface LoginData {
 const Login: React.FC = () => {
   const navigate = useNavigate();
   const { setUser } = useAuth();
+  const API_URL = import.meta.env.VITE_API_URL;
   const [formData, setFormData] = useState<LoginData>({
     email: '',
     password: ''
   });
   const [error, setError] = useState<string>('');
 
+  console.log('Login API URL:', API_URL);
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError('');
 
     try {
-      const res = await fetch('http://localhost:5001/api/auth/login', {
+      console.log('Sending login request to:', `${API_URL}/api/auth/login`);
+      const res = await fetch(`${API_URL}/api/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

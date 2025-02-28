@@ -12,11 +12,26 @@ import ImageTest from './components/ImageTest';
 import Profile from './routes/Profile';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
+import AdminDashboard from './routes/admin/AdminDashboard';
+import UsersManagement from './routes/admin/UsersManagement';
+import AdminOverview from './routes/admin/AdminOverview';
+import PanelManagement from './routes/admin/PanelManagement';
+import AboutManagement from './routes/admin/AboutManagement';
+import GalleryManagement from './routes/admin/GalleryManagement';
+import BlogManagement from './routes/admin/BlogManagement';
+
+// Add this configuration object
+const routerConfig = {
+  future: {
+    v7_startTransition: true,
+    v7_relativeSplatPath: true
+  }
+};
 
 const App: React.FC = () => {
   return (
     <AuthProvider>
-      <Router>
+      <Router {...routerConfig}>
         <Routes>
           <Route path="/" element={<MainLayout />}>
             <Route index element={<Homepage />} />
@@ -48,6 +63,29 @@ const App: React.FC = () => {
                 </div>
               </div>
             } />
+          </Route>
+
+          <Route 
+            path="/admin" 
+            element={
+              <ProtectedRoute requiredRole={['admin', 'staff']}>
+                <AdminDashboard />
+              </ProtectedRoute>
+            }
+          >
+            <Route index element={<AdminOverview />} />
+            <Route 
+              path="users" 
+              element={
+                <ProtectedRoute requiredRole={['admin']}>
+                  <UsersManagement />
+                </ProtectedRoute>
+              } 
+            />
+            <Route path="panel" element={<PanelManagement />} />
+            <Route path="about" element={<AboutManagement />} />
+            <Route path="gallery" element={<GalleryManagement />} />
+            <Route path="blog" element={<BlogManagement />} />
           </Route>
         </Routes>
       </Router>

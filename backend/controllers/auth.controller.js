@@ -79,13 +79,15 @@ export const login = async (req, res) => {
     }
 
     // Create token
-    const token = jwt.sign({ id: user._id }, "your_jwt_secret", {
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: "1d"
     });
 
     // Set cookie
     res.cookie("token", token, {
       httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
       maxAge: 24 * 60 * 60 * 1000 // 1 day
     });
 
@@ -94,7 +96,10 @@ export const login = async (req, res) => {
       user: {
         id: user._id,
         username: user.username,
-        email: user.email
+        email: user.email,
+        role: user.role,
+        fullName: user.fullName,
+        position: user.position
       }
     });
   } catch (error) {
@@ -127,7 +132,20 @@ export const getProfile = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      user
+      user: {
+        id: user._id,
+        username: user.username,
+        email: user.email,
+        role: user.role,
+        fullName: user.fullName,
+        studentId: user.studentId,
+        department: user.department,
+        batch: user.batch,
+        phone: user.phone,
+        position: user.position,
+        bio: user.bio,
+        img: user.img
+      }
     });
   } catch (error) {
     res.status(500).json({
