@@ -21,6 +21,8 @@ import AboutManagement from './routes/admin/AboutManagement';
 import GalleryManagement from './routes/admin/GalleryManagement';
 import BlogManagement from './routes/admin/BlogManagement';
 import RegistrationInbox from './routes/admin/RegistrationInbox';
+import Publications from './routes/Publications';
+import PublicationsManagement from './routes/admin/PublicationsManagement';
 
 // Add this configuration object
 const routerConfig = {
@@ -58,6 +60,7 @@ const App: React.FC = () => {
             <Route path="blog" element={<Blog />} />
             <Route path="blog/:slug" element={<BlogPost />} />
             <Route path="test" element={<ImageTest />} />
+            <Route path="publications" element={<Publications />} />
             <Route path="*" element={
               <div className="min-h-screen bg-gray-50 pt-20 flex items-center justify-center">
                 <div className="text-center">
@@ -90,6 +93,7 @@ const App: React.FC = () => {
             <Route path="gallery" element={<GalleryManagement />} />
             <Route path="blog" element={<BlogManagement />} />
             <Route path="inbox" element={<RegistrationInbox />} />
+            <Route path="publications" element={<PublicationsManagement />} />
           </Route>
         </Routes>
       </Router>

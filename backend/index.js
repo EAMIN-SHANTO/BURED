@@ -8,6 +8,7 @@ import panelRoutes from './routes/panel.route.js';
 import galleryRoutes from './routes/gallery.route.js';
 import blogRoutes from './routes/blog.route.js';
 import registrationRoutes from './routes/registration.route.js';
+import publicationRoutes from './routes/publication.route.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -46,6 +47,7 @@ app.use('/api/panel', panelRoutes);
 app.use('/api/gallery', galleryRoutes);
 app.use('/api/blog', blogRoutes);
 app.use('/api/registration', registrationRoutes);
+app.use('/api/publications', publicationRoutes);
 
 // Add this after your middleware configurations
 const __filename = fileURLToPath(import.meta.url);

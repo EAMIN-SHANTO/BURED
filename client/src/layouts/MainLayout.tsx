@@ -14,6 +14,7 @@ const MainLayout: React.FC = () => {
     { name: 'About', href: '/about' },
     { name: 'Current Panel', href: '/panel' },
     { name: 'Gallery', href: '/gallery' },
+    { name: 'Publications', href: '/publications' },
     { name: 'Blog', href: '/blog' }
   ];
 

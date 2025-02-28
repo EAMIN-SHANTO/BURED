@@ -5,32 +5,34 @@ import fs from 'fs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const UPLOAD_PATH = path.join(__dirname, '../uploads/blog');
 
 // Create directory if it doesn't exist
-if (!fs.existsSync(UPLOAD_PATH)) {
-  fs.mkdirSync(UPLOAD_PATH, { recursive: true });
+if (!fs.existsSync(path.join(__dirname, '../uploads/publications'))) {
+  fs.mkdirSync(path.join(__dirname, '../uploads/publications'), { recursive: true });
 }
 
-// Configure multer for storing files
+// Configure storage
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, UPLOAD_PATH);
+    // Check which type of file is being uploaded
+    if (file.fieldname === 'coverImage') {
+      cb(null, path.join(__dirname, '../uploads/publications'));
+    } else {
+      cb(null, path.join(__dirname, '../uploads'));
+    }
   },
   filename: function (req, file, cb) {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    const ext = path.extname(file.originalname);
-    cb(null, uniqueSuffix + ext);
+    cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
   }
 });
 
 // File filter
 const fileFilter = (req, file, cb) => {
-  const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-  if (allowedTypes.includes(file.mimetype)) {
+  if (file.mimetype.startsWith('image/')) {
     cb(null, true);
   } else {
-    cb(new Error('Invalid file type. Only JPEG, PNG, GIF and WebP are allowed.'), false);
+    cb(new Error('Not an image! Please upload an image.'), false);
   }
 };
 

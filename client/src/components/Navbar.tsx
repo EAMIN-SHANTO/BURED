@@ -43,6 +43,10 @@ const Navbar: React.FC<NavbarProps> = ({ navigation }) => {
     }
   };
 
+  const handleContactClick = () => {
+    window.location.href = 'mailto:club.bured@bracu.ac.bd';
+  };
+
   return (
     <header 
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 
@@ -91,18 +95,26 @@ const Navbar: React.FC<NavbarProps> = ({ navigation }) => {
 
           {/* Contact Button */}
           <div className="flex items-center gap-4">
-            <Link to="/contact" className="hidden md:inline-flex items-center gap-2 px-6 py-2.5 
-              bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl 
-              text-sm font-medium transition-all duration-300 shadow-lg shadow-blue-600/20 
-              hover:shadow-xl hover:shadow-blue-600/30 hover:scale-105 
-              hover:gap-3 active:scale-95">
-              <span>Contact Us</span>
-              <svg className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" 
-                fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
-                  d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            <button
+              onClick={handleContactClick}
+              className="flex items-center gap-2 px-6 py-2.5 bg-blue-600 text-white 
+                rounded-lg hover:bg-blue-700 transition-all duration-300"
+            >
+              Contact Us
+              <svg 
+                className="w-4 h-4" 
+                fill="none" 
+                stroke="currentColor" 
+                viewBox="0 0 24 24"
+              >
+                <path 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                  strokeWidth={2} 
+                  d="M14 5l7 7m0 0l-7 7m7-7H3" 
+                />
               </svg>
-            </Link>
+            </button>
 
             {user ? (
               <Link to="/profile" className="flex items-center gap-2 px-4 py-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors">

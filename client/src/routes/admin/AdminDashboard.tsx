@@ -16,7 +16,8 @@ const AdminDashboard: React.FC = () => {
     { name: 'About Page', href: '/admin/about' },
     { name: 'Gallery', href: '/admin/gallery' },
     { name: 'Blog Posts', href: '/admin/blog' },
-    { name: 'Registration Inbox', href: '/admin/inbox' }
+    { name: 'Registration Inbox', href: '/admin/inbox' },
+    { name: 'Publications', href: '/admin/publications' }
   ];
 
   if (!user || (user.role !== 'admin' && user.role !== 'staff')) {
