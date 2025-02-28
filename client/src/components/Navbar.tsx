@@ -10,6 +10,7 @@ interface NavbarProps {
 const Navbar: React.FC<NavbarProps> = ({ navigation }) => {
   const location = useLocation();
   const [scrolled, setScrolled] = useState<boolean>(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
   const { user } = useAuth();
 
   useEffect(() => {
@@ -19,6 +20,11 @@ const Navbar: React.FC<NavbarProps> = ({ navigation }) => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Close mobile menu when changing routes
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [location.pathname]);
 
   const getRoleIcon = (role?: string) => {
     switch (role) {
@@ -55,7 +61,7 @@ const Navbar: React.FC<NavbarProps> = ({ navigation }) => {
       <div className="max-w-[1440px] mx-auto w-[90%]">
         <div className="flex items-center justify-between h-24">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-4 group">
+          <Link to="/" className="flex items-center space-x-4 group z-20">
             <div className="relative">
               <div className="absolute -inset-2 bg-blue-100 rounded-full opacity-0 
                 group-hover:opacity-100 blur-md transition-opacity duration-300" />
@@ -70,13 +76,13 @@ const Navbar: React.FC<NavbarProps> = ({ navigation }) => {
                 bg-clip-text text-transparent">
                 BUReD
               </span>
-              <span className="text-xs text-gray-500 -mt-1">
+              <span className="text-xs text-gray-500 -mt-1 hidden sm:block">
                 BRAC University Research for Development Club
               </span>
             </div>
           </Link>
 
-          {/* Navigation Links */}
+          {/* Navigation Links - Desktop */}
           <nav className="hidden md:flex items-center space-x-10">
             {navigation.map((item) => (
               <Link
@@ -95,8 +101,8 @@ const Navbar: React.FC<NavbarProps> = ({ navigation }) => {
             ))}
           </nav>
 
-          {/* Contact Button */}
-          <div className="flex items-center gap-4">
+          {/* Contact Button - Desktop */}
+          <div className="hidden md:flex items-center gap-4">
             <button
               onClick={handleContactClick}
               className="flex items-center gap-2 px-6 py-2.5 bg-blue-600 text-white 
@@ -138,20 +144,103 @@ const Navbar: React.FC<NavbarProps> = ({ navigation }) => {
           </div>
 
           {/* Mobile Menu Button */}
-          <button className="md:hidden p-2 rounded-xl text-gray-600 hover:bg-gray-100/80 
-            backdrop-blur-sm transition-colors">
-            <svg
-              className="h-6 w-6"
-              fill="none"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path d="M4 6h16M4 12h16M4 18h16"></path>
-            </svg>
+          <button 
+            className="md:hidden p-2 rounded-xl text-gray-600 hover:bg-gray-100/80 
+              backdrop-blur-sm transition-colors z-20"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          >
+            {mobileMenuOpen ? (
+              <svg
+                className="h-6 w-6"
+                fill="none"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path d="M6 18L18 6M6 6l12 12"></path>
+              </svg>
+            ) : (
+              <svg
+                className="h-6 w-6"
+                fill="none"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path d="M4 6h16M4 12h16M4 18h16"></path>
+              </svg>
+            )}
           </button>
+        </div>
+      </div>
+
+      {/* Mobile Menu */}
+      <div className={`md:hidden fixed inset-0 bg-white z-10 transform transition-transform duration-300 ease-in-out ${
+        mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
+      }`}>
+        <div className="flex flex-col h-full pt-24 px-6">
+          <nav className="flex flex-col space-y-4 mt-6">
+            {navigation.map((item) => (
+              <Link
+                key={item.name}
+                to={item.href}
+                className={`px-4 py-3 rounded-lg text-base font-medium transition-colors duration-200 ${
+                  item.name === 'Publications' 
+                    ? 'bg-blue-600 text-white' 
+                    : location.pathname === item.href
+                    ? 'bg-gray-100 text-gray-900'
+                    : 'text-gray-600 hover:bg-gray-100'
+                }`}
+              >
+                {item.name}
+              </Link>
+            ))}
+          </nav>
+          
+          <div className="mt-8 flex flex-col space-y-4">
+            <button
+              onClick={handleContactClick}
+              className="flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 text-white 
+                rounded-lg hover:bg-blue-700 transition-all duration-300"
+            >
+              Contact Us
+              <svg 
+                className="w-4 h-4" 
+                fill="none" 
+                stroke="currentColor" 
+                viewBox="0 0 24 24"
+              >
+                <path 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                  strokeWidth={2} 
+                  d="M14 5l7 7m0 0l-7 7m7-7H3" 
+                />
+              </svg>
+            </button>
+
+            {user ? (
+              <Link to="/profile" className="flex items-center gap-2 px-4 py-3 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors">
+                <div className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white">
+                  {user.username.charAt(0).toUpperCase()}
+                </div>
+                <span className="font-medium text-gray-700">{user.username}</span>
+                {user.role && (
+                  <div className="ml-1" title={`Role: ${user.role}`}>
+                    {getRoleIcon(user.role)}
+                  </div>
+                )}
+              </Link>
+            ) : (
+              <Link to="/login" className="flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors">
+                Sign In
+              </Link>
+            )}
+          </div>
         </div>
       </div>
     </header>
