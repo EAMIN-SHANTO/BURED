@@ -23,6 +23,8 @@ import BlogManagement from './routes/admin/BlogManagement';
 import RegistrationInbox from './routes/admin/RegistrationInbox';
 import Publications from './routes/Publications';
 import PublicationsManagement from './routes/admin/PublicationsManagement';
+import CertificateManagement from './routes/admin/CertificateManagement';
+import CertificateVerification from './routes/CertificateVerification';
 
 // Add this configuration object
 const routerConfig = {
@@ -61,6 +63,7 @@ const App: React.FC = () => {
             <Route path="blog/:slug" element={<BlogPost />} />
             <Route path="test" element={<ImageTest />} />
             <Route path="publications" element={<Publications />} />
+            <Route path="verify-certificate/:certificateId" element={<CertificateVerification />} />
             <Route path="*" element={
               <div className="min-h-screen bg-gray-50 pt-20 flex items-center justify-center">
                 <div className="text-center">
@@ -94,6 +97,7 @@ const App: React.FC = () => {
             <Route path="blog" element={<BlogManagement />} />
             <Route path="inbox" element={<RegistrationInbox />} />
             <Route path="publications" element={<PublicationsManagement />} />
+            <Route path="certificates" element={<CertificateManagement />} />
           </Route>
         </Routes>
       </Router>

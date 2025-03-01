@@ -21,13 +21,18 @@ const AdminDashboard: React.FC = () => {
     { name: 'Gallery', href: '/admin/gallery' },
     { name: 'Blog Posts', href: '/admin/blog' },
     { name: 'Registration Inbox', href: '/admin/inbox' },
-    { name: 'Publications', href: '/admin/publications' }
+    { name: 'Publications', href: '/admin/publications' },
+    { name: 'Certificates', href: '/admin/certificates' }
   ];
 
   if (!user || (user.role !== 'admin' && user.role !== 'staff')) {
     console.log('Access denied. User role:', user?.role);
     return <div>Access Denied</div>;
   }
+
+  const isActive = (path: string) => {
+    return location.pathname === path ? 'bg-blue-700' : '';
+  };
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col">

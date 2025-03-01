@@ -11,6 +11,7 @@ import registrationRoutes from './routes/registration.route.js';
 import publicationRoutes from './routes/publication.route.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import certificateRoutes from './routes/certificate.routes.js';
 
 dotenv.config();
 const app = express();
@@ -48,6 +49,7 @@ app.use('/api/gallery', galleryRoutes);
 app.use('/api/blog', blogRoutes);
 app.use('/api/registration', registrationRoutes);
 app.use('/api/publications', publicationRoutes);
+app.use('/api/certificates', certificateRoutes);
 
 // Add this after your middleware configurations
 const __filename = fileURLToPath(import.meta.url);
