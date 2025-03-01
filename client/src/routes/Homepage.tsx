@@ -849,18 +849,7 @@ const Homepage: React.FC = () => {
 
 
       {/* Footer navigation with Verify Certificate button */}
-      <div className="bg-white py-6 border-t border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-center items-center space-x-8">
-            <button
-              onClick={() => setIsVerificationModalOpen(true)}
-              className="text-blue-600 hover:text-blue-800 font-medium"
-            >
-              Verify Certificate
-            </button>
-          </div>
-        </div>
-      </div>
+
       
       {/* Registration Form Modal */}
       {showRegistrationForm && (
