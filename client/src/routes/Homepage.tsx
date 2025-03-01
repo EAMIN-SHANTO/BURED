@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from "react-router-dom";
 import RegistrationForm from '../components/RegistrationForm';
+import CertificateVerificationModal from '../components/CertificateVerificationModal';
 
 
 // Interface for Featured Media
@@ -19,6 +20,7 @@ interface TechnologyPartner {
 
 const Homepage: React.FC = () => {
   const [showRegistrationForm, setShowRegistrationForm] = useState(false);
+  const [isVerificationModalOpen, setIsVerificationModalOpen] = useState(false);
 
   const featuredMedia: FeaturedMedia[] = [
     { logo: "/photos/media/dailystar.png", alt: "The Daily Star", url: "#" },
@@ -863,6 +865,34 @@ const Homepage: React.FC = () => {
       {showRegistrationForm && (
         <RegistrationForm onClose={() => setShowRegistrationForm(false)} />
       )}
+
+      {/* Add this before the footer */}
+      <div className="bg-gray-100 py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">
+              Verify Your Certificate
+            </h2>
+            <p className="mt-4 text-lg text-gray-500">
+              Check the authenticity of your BUReD certificate
+            </p>
+            <div className="mt-8">
+              <button
+                onClick={() => setIsVerificationModalOpen(true)}
+                className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              >
+                Verify BUReD Certificate
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      {/* Certificate Verification Modal */}
+      <CertificateVerificationModal 
+        isOpen={isVerificationModalOpen}
+        onClose={() => setIsVerificationModalOpen(false)}
+      />
     </div>
   );
 };
