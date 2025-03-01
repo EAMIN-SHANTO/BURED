@@ -64,7 +64,7 @@ const CertificateVerificationModal: React.FC<CertificateVerificationModalProps> 
                 value={certificateId}
                 onChange={(e) => setCertificateId(e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                placeholder="e.g. CSE-2023-12345"
+                placeholder="e.g. IT-2023-12345"
                 required
               />
             </div>
@@ -79,7 +79,7 @@ const CertificateVerificationModal: React.FC<CertificateVerificationModalProps> 
                 value={studentId}
                 onChange={(e) => setStudentId(e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                placeholder="e.g. 2019-1-60-123"
+                placeholder="e.g. 21301429"
                 required
               />
             </div>
