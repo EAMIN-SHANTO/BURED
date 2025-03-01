@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { 
+  FiUser, FiMail, FiTag, FiBook, FiPhone, FiInfo, 
+  FiEdit2, FiLogOut, FiSave, FiX, FiAward, FiBriefcase, FiHash,
+  FiChevronRight
+} from 'react-icons/fi';
 
 interface User {
   id: string;
@@ -14,7 +19,6 @@ interface User {
   phone?: string;
   position?: string;
   bio?: string;
-  img?: string;
 }
 
 interface UpdateableFields {
@@ -33,6 +37,7 @@ const Profile: React.FC = () => {
   const [error, setError] = useState<string>('');
   const [success, setSuccess] = useState<string>('');
   const [isEditing, setIsEditing] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const API_URL = import.meta.env.VITE_API_URL;
 
   const [formData, setFormData] = useState<UpdateableFields>({
@@ -46,8 +51,8 @@ const Profile: React.FC = () => {
 
   useEffect(() => {
     const fetchUser = async () => {
+      setIsLoading(true);
       try {
-        console.log('Fetching user profile from:', `${API_URL}/api/auth/profile`);
         const res = await fetch(`${API_URL}/api/auth/profile`, {
           credentials: 'include',
         });
@@ -77,6 +82,8 @@ const Profile: React.FC = () => {
         console.error('Failed to fetch user:', err);
         setError('Failed to fetch user data');
         navigate('/login');
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -87,6 +94,7 @@ const Profile: React.FC = () => {
     e.preventDefault();
     setError('');
     setSuccess('');
+    setIsLoading(true);
 
     try {
       const res = await fetch(`${API_URL}/api/auth/update-profile`, {
@@ -111,6 +119,8 @@ const Profile: React.FC = () => {
       setIsEditing(false);
     } catch (err) {
       setError('Failed to update profile');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -132,261 +142,461 @@ const Profile: React.FC = () => {
     }
   };
 
+  // Get initials for avatar
+  const getInitials = (name: string) => {
+    return name.charAt(0).toUpperCase();
+  };
+
+  // Get a consistent color based on username
+  const getAvatarColor = (username: string) => {
+    const colors = [
+      'bg-blue-600', 'bg-green-600', 'bg-purple-600', 
+      'bg-red-600', 'bg-indigo-600', 'bg-pink-600', 
+      'bg-yellow-600', 'bg-teal-600'
+    ];
+    
+    // Simple hash function to get consistent color
+    let hash = 0;
+    for (let i = 0; i < username.length; i++) {
+      hash = username.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    
+    return colors[Math.abs(hash) % colors.length];
+  };
+
+  if (isLoading && !user) {
+    return (
+      <div className="min-h-screen bg-gray-50 pt-16 md:pt-24 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      </div>
+    );
+  }
+
   if (!user) {
     return (
-      <div className="min-h-screen bg-gray-50 pt-24 flex items-center justify-center">
-        <div className="text-center">Loading...</div>
+      <div className="min-h-screen bg-gray-50 pt-16 md:pt-24 flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-red-500 mb-4">Unable to load profile</div>
+          <button 
+            onClick={() => navigate('/login')}
+            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+          >
+            Return to Login
+          </button>
+        </div>
       </div>
     );
   }
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="pt-32 pb-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Alerts - Fixed at top for mobile */}
+      {(error || success) && (
+        <div className="fixed top-16 md:top-20 inset-x-0 z-50 px-4">
           {error && (
-            <div className="mb-4 bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg">
-              {error}
-            </div>
-          )}
-          {success && (
-            <div className="mb-4 bg-green-50 border border-green-200 text-green-600 px-4 py-3 rounded-lg">
-              {success}
-            </div>
-          )}
-
-          <div className="bg-white shadow overflow-hidden sm:rounded-lg">
-            <div className="px-4 py-5 sm:px-6 flex justify-between items-center">
-              <div>
-                <h3 className="text-lg leading-6 font-medium text-gray-900">
-                  Profile Information
-                </h3>
-                <p className="mt-1 max-w-2xl text-sm text-gray-500">
-                  Personal details and account settings.
-                </p>
+            <div className="mt-4 bg-red-50 border border-red-200 text-red-700 p-4 rounded-xl flex items-center shadow-lg">
+              <div className="flex-shrink-0">
+                <svg className="h-5 w-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                </svg>
               </div>
-              <div className="flex gap-3">
+              <div className="ml-3 flex-1">
+                <p className="text-sm font-medium">{error}</p>
+              </div>
+              <button 
+                onClick={() => setError('')}
+                className="ml-auto text-red-500 hover:text-red-600"
+              >
+                <FiX size={20} />
+              </button>
+            </div>
+          )}
+          
+          {success && (
+            <div className="mt-4 bg-green-50 border border-green-200 text-green-700 p-4 rounded-xl flex items-center shadow-lg">
+              <div className="flex-shrink-0">
+                <svg className="h-5 w-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <div className="ml-3 flex-1">
+                <p className="text-sm font-medium">{success}</p>
+              </div>
+              <button 
+                onClick={() => setSuccess('')}
+                className="ml-auto text-green-500 hover:text-green-600"
+              >
+                <FiX size={20} />
+              </button>
+            </div>
+          )}
+        </div>
+      )}
+
+      <div className="pt-16 md:pt-24 pb-12">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Profile Card */}
+          <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+            {/* Header */}
+            <div className="bg-blue-600 p-6 sm:p-8 rounded-t-xl">
+              <div className="flex flex-col sm:flex-row items-center sm:items-start justify-between">
+                <div className="flex flex-col sm:flex-row items-center">
+                  {/* First Letter Avatar */}
+                  <div className="h-24 w-24 sm:h-28 sm:w-28 rounded-full bg-white p-1.5 shadow-lg flex-shrink-0 transform hover:scale-105 transition-transform duration-300">
+                    <div className={`h-full w-full rounded-full ${getAvatarColor(user.username)} flex items-center justify-center text-white text-4xl font-bold`}>
+                      {getInitials(user.username)}
+                    </div>
+                  </div>
+                  
+                  <div className="mt-4 sm:mt-0 sm:ml-6 text-center sm:text-left">
+                    <h1 className="text-2xl font-bold text-white">{user.username}</h1>
+                    <div className="flex flex-col sm:flex-row items-center sm:items-start mt-1">
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-800 text-white">
+                        {user.role || 'Member'}
+                      </span>
+                      <span className="mt-1 sm:mt-0 sm:ml-2 text-blue-100">{user.email}</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="mt-6 sm:mt-0 flex space-x-3">
+                  {!isEditing ? (
+                    <button
+                      onClick={() => setIsEditing(true)}
+                      className="inline-flex items-center px-4 py-2 bg-blue-700 text-white rounded-lg hover:bg-blue-800 transition-colors shadow-sm"
+                    >
+                      <FiEdit2 className="mr-2" />
+                      <span>Edit Profile</span>
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => setIsEditing(false)}
+                      className="inline-flex items-center px-4 py-2 bg-white text-blue-700 rounded-lg hover:bg-blue-50 transition-colors shadow-sm"
+                    >
+                      <FiX className="mr-2" />
+                      <span>Cancel</span>
+                    </button>
+                  )}
+                  <button
+                    onClick={handleLogout}
+                    className="inline-flex items-center px-4 py-2 bg-white text-blue-700 rounded-lg hover:bg-blue-50 transition-colors shadow-sm"
+                  >
+                    <FiLogOut className="mr-2" />
+                    <span>Logout</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Profile Content */}
+            <div className="p-6 sm:p-8">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-xl font-semibold text-gray-900">
+                  {isEditing ? 'Edit Profile Information' : 'Profile Information'}
+                </h2>
                 {!isEditing && (
                   <button
                     onClick={() => setIsEditing(true)}
-                    className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                    className="inline-flex items-center text-sm text-blue-600 hover:text-blue-800"
                   >
-                    Edit Profile
+                    <FiEdit2 className="mr-1" size={16} />
+                    Edit
                   </button>
                 )}
-                <button
-                  onClick={handleLogout}
-                  className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-                >
-                  Logout
-                </button>
               </div>
-            </div>
-            <div className="border-t border-gray-200">
+
               {isEditing ? (
-                <form onSubmit={handleUpdate}>
-                  <div className="px-4 py-5 bg-white sm:p-6">
-                    <div className="grid grid-cols-6 gap-6">
-                      {/* Read-only fields */}
-                      <div className="col-span-6 sm:col-span-3">
-                        <label className="block text-sm font-medium text-gray-500">
-                          Username (read-only)
-                        </label>
-                        <input
-                          type="text"
-                          value={user?.username}
-                          disabled
-                          className="mt-1 block w-full bg-gray-50 border border-gray-300 rounded-md shadow-sm py-2 px-3 text-gray-500"
-                        />
-                      </div>
-                      <div className="col-span-6 sm:col-span-3">
-                        <label className="block text-sm font-medium text-gray-500">
-                          Email (read-only)
-                        </label>
-                        <input
-                          type="email"
-                          value={user?.email}
-                          disabled
-                          className="mt-1 block w-full bg-gray-50 border border-gray-300 rounded-md shadow-sm py-2 px-3 text-gray-500"
-                        />
-                      </div>
-                      <div className="col-span-6 sm:col-span-3">
-                        <label className="block text-sm font-medium text-gray-500">
-                          Role (read-only)
-                        </label>
-                        <input
-                          type="text"
-                          value={user?.role || 'User'}
-                          disabled
-                          className="mt-1 block w-full bg-gray-50 border border-gray-300 rounded-md shadow-sm py-2 px-3 text-gray-500"
-                        />
-                      </div>
-                      <div className="col-span-6 sm:col-span-3">
-                        <label className="block text-sm font-medium text-gray-500">
-                          Position (read-only)
-                        </label>
-                        <input
-                          type="text"
-                          value={user?.position || '-'}
-                          disabled
-                          className="mt-1 block w-full bg-gray-50 border border-gray-300 rounded-md shadow-sm py-2 px-3 text-gray-500"
-                        />
-                      </div>
+                <form onSubmit={handleUpdate} className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-1">
+                      <label className="block text-sm font-medium text-gray-700 flex items-center">
+                        <FiUser className="mr-2" />
+                        Username (read-only)
+                      </label>
+                      <input
+                        type="text"
+                        value={user.username}
+                        disabled
+                        className="w-full bg-gray-50 border border-gray-200 rounded-lg py-2 px-3 text-gray-500"
+                      />
+                    </div>
+                    
+                    <div className="space-y-1">
+                      <label className="block text-sm font-medium text-gray-700 flex items-center">
+                        <FiMail className="mr-2" />
+                        Email (read-only)
+                      </label>
+                      <input
+                        type="email"
+                        value={user.email}
+                        disabled
+                        className="w-full bg-gray-50 border border-gray-200 rounded-lg py-2 px-3 text-gray-500"
+                      />
+                    </div>
+                    
+                    <div className="space-y-1">
+                      <label className="block text-sm font-medium text-gray-700 flex items-center">
+                        <FiAward className="mr-2" />
+                        Role (read-only)
+                      </label>
+                      <input
+                        type="text"
+                        value={user?.role || 'User'}
+                        disabled
+                        className="w-full bg-gray-50 border border-gray-200 rounded-lg py-2 px-3 text-gray-500"
+                      />
+                    </div>
+                    
+                    <div className="space-y-1">
+                      <label className="block text-sm font-medium text-gray-700 flex items-center">
+                        <FiBriefcase className="mr-2" />
+                        Position (read-only)
+                      </label>
+                      <input
+                        type="text"
+                        value={user?.position || '-'}
+                        disabled
+                        className="w-full bg-gray-50 border border-gray-200 rounded-lg py-2 px-3 text-gray-500"
+                      />
+                    </div>
 
-                      {/* Editable fields */}
-                      <div className="col-span-6 sm:col-span-3">
-                        <label className="block text-sm font-medium text-gray-700">
-                          Full Name
-                        </label>
-                        <input
-                          type="text"
-                          value={formData.fullName}
-                          onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
-                          className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                        />
-                      </div>
+                    {/* Editable fields */}
+                    <div className="space-y-1">
+                      <label className="block text-sm font-medium text-gray-700 flex items-center">
+                        <FiUser className="mr-2" />
+                        Full Name
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.fullName}
+                        onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
+                        className="w-full border border-gray-300 rounded-lg py-2 px-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="Enter your full name"
+                      />
+                    </div>
 
-                      <div className="col-span-6 sm:col-span-3">
-                        <label className="block text-sm font-medium text-gray-700">
-                          Student ID
-                        </label>
-                        <input
-                          type="text"
-                          value={formData.studentId}
-                          onChange={(e) => setFormData({ ...formData, studentId: e.target.value })}
-                          className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                        />
-                      </div>
+                    <div className="space-y-1">
+                      <label className="block text-sm font-medium text-gray-700 flex items-center">
+                        <FiHash className="mr-2" />
+                        Student ID
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.studentId}
+                        onChange={(e) => setFormData({ ...formData, studentId: e.target.value })}
+                        className="w-full border border-gray-300 rounded-lg py-2 px-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="Enter your student ID"
+                      />
+                    </div>
 
-                      <div className="col-span-6 sm:col-span-3">
-                        <label className="block text-sm font-medium text-gray-700">
-                          Department
-                        </label>
-                        <input
-                          type="text"
-                          value={formData.department}
-                          onChange={(e) => setFormData({ ...formData, department: e.target.value })}
-                          className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                        />
-                      </div>
+                    <div className="space-y-1">
+                      <label className="block text-sm font-medium text-gray-700 flex items-center">
+                        <FiBook className="mr-2" />
+                        Department
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.department}
+                        onChange={(e) => setFormData({ ...formData, department: e.target.value })}
+                        className="w-full border border-gray-300 rounded-lg py-2 px-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="Enter your department"
+                      />
+                    </div>
 
-                      <div className="col-span-6 sm:col-span-3">
-                        <label className="block text-sm font-medium text-gray-700">
-                          Batch
-                        </label>
-                        <input
-                          type="text"
-                          value={formData.batch}
-                          onChange={(e) => setFormData({ ...formData, batch: e.target.value })}
-                          className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                        />
-                      </div>
+                    <div className="space-y-1">
+                      <label className="block text-sm font-medium text-gray-700 flex items-center">
+                        <FiTag className="mr-2" />
+                        Batch
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.batch}
+                        onChange={(e) => setFormData({ ...formData, batch: e.target.value })}
+                        className="w-full border border-gray-300 rounded-lg py-2 px-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="Enter your batch"
+                      />
+                    </div>
 
-                      <div className="col-span-6 sm:col-span-3">
-                        <label className="block text-sm font-medium text-gray-700">
-                          Phone
-                        </label>
-                        <input
-                          type="tel"
-                          value={formData.phone}
-                          onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                          className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                        />
-                      </div>
-
-                      <div className="col-span-6">
-                        <label className="block text-sm font-medium text-gray-700">
-                          Bio
-                        </label>
-                        <textarea
-                          rows={4}
-                          value={formData.bio}
-                          onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
-                          className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                        />
-                      </div>
+                    <div className="space-y-1">
+                      <label className="block text-sm font-medium text-gray-700 flex items-center">
+                        <FiPhone className="mr-2" />
+                        Phone
+                      </label>
+                      <input
+                        type="tel"
+                        value={formData.phone}
+                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                        className="w-full border border-gray-300 rounded-lg py-2 px-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="Enter your phone number"
+                      />
                     </div>
                   </div>
 
-                  <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
+                  <div className="space-y-1">
+                    <label className="block text-sm font-medium text-gray-700 flex items-center">
+                      <FiInfo className="mr-2" />
+                      Bio
+                    </label>
+                    <textarea
+                      rows={4}
+                      value={formData.bio}
+                      onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
+                      className="w-full border border-gray-300 rounded-lg py-2 px-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      placeholder="Tell us about yourself"
+                    />
+                  </div>
+
+                  <div className="flex justify-end space-x-4">
                     <button
                       type="button"
                       onClick={() => setIsEditing(false)}
-                      className="mr-3 inline-flex justify-center py-2 px-4 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                      className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                     >
+                      <FiX className="mr-2" />
                       Cancel
                     </button>
                     <button
                       type="submit"
-                      className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                      disabled={isLoading}
+                      className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                     >
-                      Save Changes
+                      {isLoading ? (
+                        <>
+                          <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                          </svg>
+                          Saving...
+                        </>
+                      ) : (
+                        <>
+                          <FiSave className="mr-2" />
+                          Save Changes
+                        </>
+                      )}
                     </button>
                   </div>
                 </form>
               ) : (
-                <dl>
-                  <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                    <dt className="text-sm font-medium text-gray-500">Username</dt>
-                    <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                      {user.username}
-                    </dd>
+                <div className="divide-y divide-gray-100">
+                  {/* Personal Information Section */}
+                  <div className="py-4">
+                    <h3 className="text-sm font-medium text-gray-500 mb-3">PERSONAL INFORMATION</h3>
+                    <div className="space-y-4">
+                      <div className="flex flex-col sm:flex-row sm:items-center">
+                        <div className="w-full sm:w-1/3 flex items-center text-sm font-medium text-gray-500">
+                          <FiUser className="mr-2 text-gray-400 flex-shrink-0" />
+                          <span>Username</span>
+                        </div>
+                        <div className="mt-1 sm:mt-0 sm:w-2/3 text-base text-gray-900 font-medium">
+                          {user.username}
+                        </div>
+                      </div>
+                      
+                      <div className="flex flex-col sm:flex-row sm:items-center">
+                        <div className="w-full sm:w-1/3 flex items-center text-sm font-medium text-gray-500">
+                          <FiMail className="mr-2 text-gray-400 flex-shrink-0" />
+                          <span>Email</span>
+                        </div>
+                        <div className="mt-1 sm:mt-0 sm:w-2/3 text-base text-gray-900">
+                          {user.email}
+                        </div>
+                      </div>
+                      
+                      <div className="flex flex-col sm:flex-row sm:items-center">
+                        <div className="w-full sm:w-1/3 flex items-center text-sm font-medium text-gray-500">
+                          <FiUser className="mr-2 text-gray-400 flex-shrink-0" />
+                          <span>Full Name</span>
+                        </div>
+                        <div className="mt-1 sm:mt-0 sm:w-2/3 text-base text-gray-900">
+                          {user.fullName || '-'}
+                        </div>
+                      </div>
+                      
+                      <div className="flex flex-col sm:flex-row sm:items-center">
+                        <div className="w-full sm:w-1/3 flex items-center text-sm font-medium text-gray-500">
+                          <FiPhone className="mr-2 text-gray-400 flex-shrink-0" />
+                          <span>Phone</span>
+                        </div>
+                        <div className="mt-1 sm:mt-0 sm:w-2/3 text-base text-gray-900">
+                          {user.phone || '-'}
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                    <dt className="text-sm font-medium text-gray-500">Email</dt>
-                    <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                      {user.email}
-                    </dd>
+                  
+                  {/* Academic Information Section */}
+                  <div className="py-4">
+                    <h3 className="text-sm font-medium text-gray-500 mb-3">ACADEMIC INFORMATION</h3>
+                    <div className="space-y-4">
+                      <div className="flex flex-col sm:flex-row sm:items-center">
+                        <div className="w-full sm:w-1/3 flex items-center text-sm font-medium text-gray-500">
+                          <FiHash className="mr-2 text-gray-400 flex-shrink-0" />
+                          <span>Student ID</span>
+                        </div>
+                        <div className="mt-1 sm:mt-0 sm:w-2/3 text-base text-gray-900">
+                          {user.studentId || '-'}
+                        </div>
+                      </div>
+                      
+                      <div className="flex flex-col sm:flex-row sm:items-center">
+                        <div className="w-full sm:w-1/3 flex items-center text-sm font-medium text-gray-500">
+                          <FiBook className="mr-2 text-gray-400 flex-shrink-0" />
+                          <span>Department</span>
+                        </div>
+                        <div className="mt-1 sm:mt-0 sm:w-2/3 text-base text-gray-900">
+                          {user.department || '-'}
+                        </div>
+                      </div>
+                      
+                      <div className="flex flex-col sm:flex-row sm:items-center">
+                        <div className="w-full sm:w-1/3 flex items-center text-sm font-medium text-gray-500">
+                          <FiTag className="mr-2 text-gray-400 flex-shrink-0" />
+                          <span>Batch</span>
+                        </div>
+                        <div className="mt-1 sm:mt-0 sm:w-2/3 text-base text-gray-900">
+                          {user.batch || '-'}
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                    <dt className="text-sm font-medium text-gray-500">Full Name</dt>
-                    <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                      {user.fullName || '-'}
-                    </dd>
+                  
+                  {/* Role Information Section */}
+                  <div className="py-4">
+                    <h3 className="text-sm font-medium text-gray-500 mb-3">ROLE INFORMATION</h3>
+                    <div className="space-y-4">
+                      <div className="flex flex-col sm:flex-row sm:items-center">
+                        <div className="w-full sm:w-1/3 flex items-center text-sm font-medium text-gray-500">
+                          <FiAward className="mr-2 text-gray-400 flex-shrink-0" />
+                          <span>Role</span>
+                        </div>
+                        <div className="mt-1 sm:mt-0 sm:w-2/3">
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                            {user.role || 'User'}
+                          </span>
+                        </div>
+                      </div>
+                      
+                      <div className="flex flex-col sm:flex-row sm:items-center">
+                        <div className="w-full sm:w-1/3 flex items-center text-sm font-medium text-gray-500">
+                          <FiBriefcase className="mr-2 text-gray-400 flex-shrink-0" />
+                          <span>Position</span>
+                        </div>
+                        <div className="mt-1 sm:mt-0 sm:w-2/3 text-base text-gray-900">
+                          {user.position || '-'}
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                    <dt className="text-sm font-medium text-gray-500">Student ID</dt>
-                    <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                      {user.studentId || '-'}
-                    </dd>
+                  
+                  {/* Bio Section */}
+                  <div className="py-4">
+                    <h3 className="text-sm font-medium text-gray-500 mb-3">BIO</h3>
+                    <div className="text-base text-gray-900 whitespace-pre-line">
+                      {user.bio || 'No bio information provided.'}
+                    </div>
                   </div>
-                  <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                    <dt className="text-sm font-medium text-gray-500">Department</dt>
-                    <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                      {user.department || '-'}
-                    </dd>
-                  </div>
-                  <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                    <dt className="text-sm font-medium text-gray-500">Batch</dt>
-                    <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                      {user.batch || '-'}
-                    </dd>
-                  </div>
-                  <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                    <dt className="text-sm font-medium text-gray-500">Phone</dt>
-                    <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                      {user.phone || '-'}
-                    </dd>
-                  </div>
-                  <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                    <dt className="text-sm font-medium text-gray-500">Role</dt>
-                    <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                      {user.role || 'User'}
-                    </dd>
-                  </div>
-                  <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                    <dt className="text-sm font-medium text-gray-500">Position</dt>
-                    <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                      {user.position || '-'}
-                    </dd>
-                  </div>
-                  <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                    <dt className="text-sm font-medium text-gray-500">Bio</dt>
-                    <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                      {user.bio || '-'}
-                    </dd>
-                  </div>
-                </dl>
+                </div>
               )}
             </div>
           </div>
